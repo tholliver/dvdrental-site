@@ -1,5 +1,7 @@
-import useSWR, { Fetcher } from 'swr'
+import useSWR from 'swr'
+import Head from 'next/head'
 
+import { API_URI } from '@/config'
 type RentalInfo = {
   filmName: string
   rentalDate: string
@@ -10,10 +12,8 @@ type RentalInfo = {
 
 const Customer = () => {
   const fetcher = (url: string) => fetch(url).then((r) => r.json())
-  const { data, isLoading, error } = useSWR(
-    `http://localhost:3001/rentals/3`,
-    fetcher
-  )
+  const { data, isLoading, error } = useSWR(`${API_URI}/rentals/3`, fetcher)
+  console.log('EndPoint', API_URI)
 
   if (isLoading) return <div>Loading </div>
 
@@ -21,6 +21,10 @@ const Customer = () => {
 
   return (
     <div className="">
+      <Head>
+        <title>My page title</title>
+        <meta property="og:title" content="My page title" key="title" />
+      </Head>
       <div id="rented-films-table" className="px-4">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -50,11 +54,13 @@ const Customer = () => {
               {data.map((rental: RentalInfo, i: number) => (
                 <tr
                   key={i}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                  className={`bg-white dark:bg-gray-800 ${
+                    i === data.length ? '' : 'border-b dark:border-gray-700'
+                  }`}
                 >
                   <th
                     scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    className={`px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white`}
                   >
                     {rental.filmName}
                   </th>
@@ -63,28 +69,6 @@ const Customer = () => {
                   <td className="px-6 py-4">{rental.amountPaid}</td>
                 </tr>
               ))}
-              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  Microsoft Surface Pro
-                </th>
-                <td className="px-6 py-4">White</td>
-                <td className="px-6 py-4">Laptop PC</td>
-                <td className="px-6 py-4">$1999</td>
-              </tr>
-              <tr className="bg-white dark:bg-gray-800">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  Magic Mouse 2
-                </th>
-                <td className="px-6 py-4">Black</td>
-                <td className="px-6 py-4">Accessories</td>
-                <td className="px-6 py-4">$99</td>
-              </tr>
             </tbody>
           </table>
         </div>
