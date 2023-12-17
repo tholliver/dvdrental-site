@@ -1,21 +1,21 @@
 import useSWR from 'swr'
 import Head from 'next/head'
+import { CustomerData, RentalInfo } from '@/types'
+import { fetcher } from '@/services/fetcher'
 
 import { API_URI } from '@/config'
-type RentalInfo = {
-  filmName: string
-  rentalDate: string
-  returnDate: string
-  amountPaid: string
-  customerId: number
-}
+import TableSkeleton from '../../../components/TableSkeleton'
+import CustomerCard from '../../../components/Cards/CustomerCard'
 
 const Customer = () => {
-  const fetcher = (url: string) => fetch(url).then((r) => r.json())
   const { data, isLoading, error } = useSWR(`${API_URI}/rentals/3`, fetcher)
-  console.log('EndPoint', API_URI)
 
-  if (isLoading) return <div>Loading </div>
+  if (isLoading)
+    return (
+      <div className="m-4">
+        <TableSkeleton numberRows={10} />
+      </div>
+    )
 
   if (error) return <div>Error </div>
 
@@ -25,6 +25,10 @@ const Customer = () => {
         <title>My page title</title>
         <meta property="og:title" content="My page title" key="title" />
       </Head>
+
+      <div className="m-4 rounded-t-lg">
+        <CustomerCard />
+      </div>
       <div id="rented-films-table" className="px-4">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
