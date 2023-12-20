@@ -1,5 +1,5 @@
 export interface CustomerData {
-  userInfo: UserInfo
+  userInfo: CustomerInfo
   paymentsSummary: PaymentsSummary
 }
 
@@ -11,7 +11,7 @@ export interface PaymentsSummary {
   totalSpend: number
 }
 
-export interface UserInfo {
+export interface CustomerInfo {
   customer_id: number
   store_id: number
   nombre: string

@@ -1,14 +1,17 @@
 import useSWR from 'swr'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { CustomerData, RentalInfo } from '@/types'
 import { fetcher } from '@/services/fetcher'
 
 import { API_URI } from '@/config'
-import TableSkeleton from '../../../components/TableSkeleton'
-import CustomerCard from '../../../components/Cards/CustomerCard'
+import TableSkeleton from '@/components/TableSkeleton'
+import CustomerCard from '@/components/Cards/CustomerCard'
 
 const Customer = () => {
-  const { data, isLoading, error } = useSWR(`${API_URI}/rentals/3`, fetcher)
+  const { id } = useRouter().query
+  const { data, isLoading, error } = useSWR(`${API_URI}/rentals/${id}`, fetcher)
+  console.log('Here the id', id)
 
   if (isLoading)
     return (
@@ -20,14 +23,9 @@ const Customer = () => {
   if (error) return <div>Error </div>
 
   return (
-    <div className="">
-      <Head>
-        <title>My page title</title>
-        <meta property="og:title" content="My page title" key="title" />
-      </Head>
-
+    <div className="py-1">
       <div className="m-4 rounded-t-lg">
-        <CustomerCard />
+        <CustomerCard id={id} />
       </div>
       <div id="rented-films-table" className="px-4">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
