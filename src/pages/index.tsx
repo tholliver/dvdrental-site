@@ -1,78 +1,22 @@
 import { Inter } from 'next/font/google'
 import Head from 'next/head'
 const inter = Inter({ subsets: ['latin'] })
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Filler,
-  Legend,
-} from 'chart.js'
-import { Line } from 'react-chartjs-2'
+
 import useSWR from 'swr'
 import { fetcher } from '@/services/fetcher'
 import { API_URI } from '@/config'
 import { BarChart } from '@/components/CustomCharts/BarChart'
 import FilmList from '@/components/FilmTable'
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Filler,
-  Legend
-)
+import { LineChart } from '@/components/CustomCharts/LineChart'
+import DashCard from '@/components/Cards/DashCard'
 
 export default function Home() {
   const { data, isLoading, error } = useSWR(
     `${API_URI}/payments/date-pays`,
     fetcher
   )
-  console.log('Here running: ', data)
+  // console.log('Here running: ', data)
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top' as const,
-      },
-      title: {
-        display: true,
-        text: 'Total payments per day',
-      },
-    },
-    maintainAspectRatio: false,
-  }
-
-  const labels = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-  ]
-
-  const graphData = {
-    labels,
-    datasets: [
-      {
-        fill: true,
-        label: 'Amount',
-        data: [100, 500, 500, 250, 500, 800, 150],
-        borderColor: 'rgb(53, 162, 235)',
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
-      },
-    ],
-  }
   return (
     <div>
       <Head>
@@ -81,21 +25,25 @@ export default function Home() {
       </Head>
 
       <div className="">
-        <div className="flex flex-col md:flex-row ">
-          <div
-            id="table-content"
-            className="flex-1 m-2 h-full overflow-y-auto  p-4"
-          >
-            <FilmList />
-          </div>
+        <section className="p-2 flex flex-col md:flex-row justify-start gap-5">
+          <DashCard />
+          <DashCard />
+          <DashCard />
+        </section>
 
-          <div className="flex-1 flex flex-col ">
-            <div className="m-2 bg-slate-800 rounded-lg">
-              <BarChart />
-            </div>
-            <div className="m-2">
-              <Line options={options} data={graphData} />
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2">
+          <div className="m-2 h-72 bg-slate-800 rounded-lg">
+            <BarChart />
+          </div>
+          <div className="m-2 h-72 bg-slate-800 rounded-lg">
+            {/* <Line options={options} data={graphData} /> */}
+            <LineChart />
+          </div>
+          DashCard
+        </div>
+        <div className="m-4 ">
+          <div id="table-content" className="">
+            <FilmList />
           </div>
         </div>
         {/* <div className="bg-gray-800 grid grid-cols-1 md:grid-cols-2 gap-4">

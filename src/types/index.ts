@@ -44,3 +44,23 @@ export interface RentalInfo {
   amountPaid: string
   customerId: number
 }
+
+export interface FilmInfo {
+  filmName: string
+  film_id: number
+  amountMade: number
+  rentedTimes: number
+  // film_id: number;
+  // titulo: string;
+  // descripcion?: string;
+  // lanzamiento?: number;
+  // language_id: number;
+  // duracion_de_renta: number;
+  // rental_rate: number;
+  // duracion?: number;
+  // costo_de_reemplazo: number;
+  rating?: string; // Assuming mpaa_rating is a string type
+  // last_update: string; // Assuming last_update is a string representation of a timestamp
+  // special_features?: string[];
+  // fulltext: string;
+}

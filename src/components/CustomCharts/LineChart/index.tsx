@@ -3,17 +3,27 @@ import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
 } from 'chart.js'
-import { Bar } from 'react-chartjs-2'
+import { Line } from 'react-chartjs-2'
+
 import { API_URI } from '@/config'
 import { fetcher } from '@/services/fetcher'
 import useSWR from 'swr'
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+)
 
 export const options = {
   responsive: true,
@@ -31,7 +41,7 @@ export const options = {
 
 // const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
 
-export function BarChart() {
+export function LineChart() {
   const {
     data: paymentsData,
     isLoading,
@@ -44,21 +54,22 @@ export function BarChart() {
   const data = {
     labels,
     datasets: [
-      {
-        label: 'Amount',
-        data: dataPayDay,
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
       // {
-      //   label: 'Dataset 2',
-      //   data: [20, 598, 120, 148, 500, 150, 200],
-      //   backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      //   label: 'Amount',
+      //   data: dataPayDay,
+      //   backgroundColor: 'rgba(255, 99, 132, 0.5)',
       // },
+      {
+        label: 'Dataset',
+        data: dataPayDay,
+        borderColor: 'rgb(53, 162, 235)',
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      },
     ],
   }
   return (
     <>
-      {isLoading ? <div>Loading</div> : <Bar options={options} data={data} />}
+      {isLoading ? <div>Loading</div> : <Line options={options} data={data} />}
     </>
   )
 }
