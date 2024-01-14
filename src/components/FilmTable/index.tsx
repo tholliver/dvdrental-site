@@ -209,7 +209,7 @@ const FilmList = () => {
             </tr>
           </thead>
           <tbody className="max-h-[30em] overflow-y-auto">
-            {data?.map((film, i) => (
+            {data?.slice(0, 10).map((film, i) => (
               <tr
                 key={film.film_id}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"

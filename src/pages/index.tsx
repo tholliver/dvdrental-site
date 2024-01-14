@@ -1,4 +1,5 @@
 import { Inter } from 'next/font/google'
+import { useState } from 'react'
 import Head from 'next/head'
 const inter = Inter({ subsets: ['latin'] })
 
@@ -11,8 +12,16 @@ import { LineChart } from '@/components/CustomCharts/LineChart'
 import DashCard from '@/components/Cards/DashCard'
 
 export default function Home() {
+  const oneYearAgoTimestamp = new Date().setFullYear(
+    new Date().getFullYear() - 1
+  )
+  const oneYearAgo = new Date(oneYearAgoTimestamp)
+  const oneYearAgoFormatted = oneYearAgo.toISOString().split('T')[0]
+
+  console.log('One Year Ago:', oneYearAgoFormatted)
+  const [dateBy, setDateBy] = useState(oneYearAgoFormatted)
   const { data, isLoading, error } = useSWR(
-    `${API_URI}/payments/date-pays`,
+    `${API_URI}/stats?startdate=${dateBy}`,
     fetcher
   )
   // console.log('Here running: ', data)
@@ -26,16 +35,17 @@ export default function Home() {
 
       <div className="">
         <section className="p-2 flex flex-col md:flex-row justify-start gap-5">
-          <DashCard stat={2} description="total" />
-          <DashCard stat={5} description="today rents" />
-          <DashCard stat={0} description="month rents" />
+          <DashCard stat={data?.rents} description="Total rents" />
+          <DashCard stat={data?.totalMade} description="Total payments" />
+          <DashCard stat={data.units} description="Total inventory" />
+          <DashCard stat={data.customers} description="Total customers" />
         </section>
 
         <div className="grid grid-cols-1 md:grid-cols-2">
-          <div className="m-2 h-72 bg-slate-800 rounded-lg">
+          <div className="m-2 bg-slate-800 rounded-lg">
             <BarChart />
           </div>
-          <div className="m-2 h-72 bg-slate-800 rounded-lg">
+          <div className="m-2  bg-slate-800 rounded-lg">
             {/* <Line options={options} data={graphData} /> */}
             <LineChart />
           </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -25,40 +25,36 @@ ChartJS.register(
   Legend
 )
 
-export const options = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      position: 'top' as const,
-    },
-    title: {
-      display: true,
-      text: 'Total Payments per Day',
-    },
-  },
-}
-
 // const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
 
 export function LineChart() {
+  const [groupBy, setGroupBy] = useState('day')
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: `Total rents per ${groupBy}`,
+      },
+    },
+  }
   const {
     data: paymentsData,
     isLoading,
     error,
-  } = useSWR(`${API_URI}/payments/date-pays`, fetcher)
+  } = useSWR(`${API_URI}/rentals/totals?by=${groupBy}`, fetcher)
 
   const getLastSeven = paymentsData?.slice(-7)
   const labels = getLastSeven?.map((date: any) => date.date)
-  const dataPayDay = getLastSeven?.map((date: any) => date.dayTotal)
+  const dataPayDay = getLastSeven?.map((date: any) => date.count)
   const data = {
     labels,
     datasets: [
-      // {
-      //   label: 'Amount',
-      //   data: dataPayDay,
-      //   backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      // },
       {
         label: 'Dataset',
         data: dataPayDay,
@@ -69,6 +65,27 @@ export function LineChart() {
   }
   return (
     <>
+      <div className=" flex gap-2 p-2 items-center">
+        Rents per
+        <button
+          className="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          onClick={() => setGroupBy('day')}
+        >
+          day
+        </button>
+        <button
+          className="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          onClick={() => setGroupBy('month')}
+        >
+          month
+        </button>
+        <button
+          className="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          onClick={() => setGroupBy('year')}
+        >
+          year
+        </button>
+      </div>
       {isLoading ? <div>Loading</div> : <Line options={options} data={data} />}
     </>
   )
