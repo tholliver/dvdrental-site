@@ -26,9 +26,9 @@ export default function Home() {
 
       <div className="">
         <section className="p-2 flex flex-col md:flex-row justify-start gap-5">
-          <DashCard />
-          <DashCard />
-          <DashCard />
+          <DashCard stat={2} description="total" />
+          <DashCard stat={5} description="today rents" />
+          <DashCard stat={0} description="month rents" />
         </section>
 
         <div className="grid grid-cols-1 md:grid-cols-2">
@@ -39,7 +39,6 @@ export default function Home() {
             {/* <Line options={options} data={graphData} /> */}
             <LineChart />
           </div>
-          DashCard
         </div>
         <div className="m-4 ">
           <div id="table-content" className="">

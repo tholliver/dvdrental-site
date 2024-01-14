@@ -64,3 +64,19 @@ export interface FilmInfo {
   // special_features?: string[];
   // fulltext: string;
 }
+
+export interface IFilm {
+  film_id: number;
+  titulo: string;
+  descripcion?: string;
+  lanzamiento: number;
+  language_id: number;
+  duracion_de_renta: number;
+  rental_rate: number;
+  duracion?: number;
+  costo_de_reemplazo: number;
+  rating: string;
+  last_update: string;
+  special_features: string[];
+  fulltext: string;
+}

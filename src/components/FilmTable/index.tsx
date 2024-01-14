@@ -3,6 +3,7 @@ import { fetcher } from '@/services/fetcher'
 import React, { InputHTMLAttributes, useState } from 'react'
 import useSWR from 'swr'
 import { FilmInfo } from '@/types'
+import Link from 'next/link'
 
 const FilmList = () => {
   const [filmInputSearch, setFilmInputSearch] = useState('')
@@ -25,7 +26,7 @@ const FilmList = () => {
     <div>
       <div className="  shadow-md sm:rounded-lg">
         <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
-          <div>
+          {/* <div>
             <button
               id="dropdownRadioButton"
               data-dropdown-toggle="dropdownRadio"
@@ -157,8 +158,8 @@ const FilmList = () => {
                 </li>
               </ul>
             </div>
-          </div>
-          <label className="sr-only">Search</label>
+          </div> */}
+          {/* <label className="sr-only">Search</label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
               <svg
@@ -183,7 +184,9 @@ const FilmList = () => {
               className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Search for items"
             />
-          </div>
+          </div> */}
+
+          <h5 className="text-xl font-bold dark:text-white">Top films rated</h5>
         </div>
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -221,12 +224,12 @@ const FilmList = () => {
                 <td className="px-6 py-4">{film.rating}</td>
                 <td className="px-6 py-4">{film.rentedTimes}</td>
                 <td className="px-6 py-4">
-                  <a
-                    href="#"
+                  <Link
+                    href={`/films/${film.film_id}`}
                     className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                   >
-                    Edit
-                  </a>
+                    Details
+                  </Link>
                 </td>
               </tr>
             ))}
