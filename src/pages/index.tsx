@@ -37,8 +37,8 @@ export default function Home() {
         <section className="p-2 flex flex-col md:flex-row justify-start gap-5">
           <DashCard stat={data?.rents} description="Total rents" />
           <DashCard stat={data?.totalMade} description="Total payments" />
-          <DashCard stat={data.units} description="Total inventory" />
-          <DashCard stat={data.customers} description="Total customers" />
+          <DashCard stat={data?.units} description="Total inventory" />
+          <DashCard stat={data?.customers} description="Total customers" />
         </section>
 
         <div className="grid grid-cols-1 md:grid-cols-2">
