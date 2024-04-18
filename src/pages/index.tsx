@@ -12,8 +12,7 @@ import FilmList from '@/components/FilmTable'
 import { LineChart } from '@/components/CustomCharts/LineChart'
 import DashCard from '@/components/Cards/DashCard'
 //  Redux states
-import { decrement, increment } from '@/lib/slices/counterSlice'
-import type { RootState } from '@/lib/store'
+
 import { IStats } from '@/types'
 
 export default function Home() {

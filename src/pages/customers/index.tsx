@@ -3,21 +3,29 @@ import { API_URI } from '@/config'
 import { CustomerInfo } from '@/types'
 import useSWR from 'swr'
 import { fetcher } from '@/services/fetcher'
+import Head from 'next/head'
 
 const Customer = () => {
-  const { data, isLoading, error } = useSWR(`${API_URI}/customers`, fetcher)
+  const { data, isLoading, error } = useSWR<[]>(`${API_URI}/customers`, fetcher)
   // const response = await fetch(`${API_URI_LOCAL}/customers/3`)
 
-  if (isLoading) return <div>nbh</div>
+  if (isLoading) return <div>Loding </div>
   if (!data) return <div>Error</div>
 
   return (
     <div>
-      <h2 className="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl dark:text-black">
-        Customers
-      </h2>
+      <Head>
+        <title>Customers</title>
 
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        {/* <meta property="og:main" content="My main page " key="main" /> */}
+      </Head>
+      {/* <h2 className="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl dark:text-black">
+        Customers
+      </h2> */}
+
+      <h3 className="p-4 text-3xl font-bold dark:text-white">Customers</h3>
+
+      <div className="relative p-3 overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -25,19 +33,16 @@ const Customer = () => {
                 Full Name
               </th>
               <th scope="col" className="px-6 py-3">
-                {' '}
                 Active
               </th>
               <th scope="col" className="px-6 py-3">
-                {' '}
                 Joined date
               </th>
               <th scope="col" className="px-6 py-3">
-                {' '}
-                Price
+                Total paid
               </th>
               <th scope="col" className="px-6 py-3">
-                <span className="sr-only">Edit</span>
+                <span className="sr-only">Deatils</span>
               </th>
             </tr>
           </thead>
@@ -51,12 +56,11 @@ const Customer = () => {
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  {customer.nombre} {customer.apellido}
+                  {customer.first_name} {customer.last_name}
                 </th>
                 <td className="px-6 py-4"> {customer.email}</td>
                 <td className="px-6 py-4">
-                  {' '}
-                  {customer.create_date.toISOString()}
+                  {customer.create_date.split('T')[0]}
                 </td>
                 <td className="px-6 py-4"> $2999</td>
                 <td className="px-6 py-4 text-right">
