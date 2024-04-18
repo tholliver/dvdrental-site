@@ -10,8 +10,10 @@ import CustomerCard from '@/components/Cards/CustomerCard'
 
 const Customer = () => {
   const { id } = useRouter().query
-  const { data, isLoading, error } = useSWR(`${API_URI}/rentals/${id}`, fetcher)
-  console.log('Here the id', id)
+  const { data, isLoading, error } = useSWR<[]>(
+    `${API_URI}/rentals/${id}`,
+    fetcher
+  )
 
   if (isLoading)
     return (
@@ -53,11 +55,11 @@ const Customer = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((rental: RentalInfo, i: number) => (
+              {data?.map((rental: RentalInfo, i: number) => (
                 <tr
                   key={i}
                   className={`bg-white dark:bg-gray-800 ${
-                    i === data.length ? '' : 'border-b dark:border-gray-700'
+                    i === data?.length ? '' : 'border-b dark:border-gray-700'
                   }`}
                 >
                   <th

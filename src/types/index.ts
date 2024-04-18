@@ -45,6 +45,8 @@ export interface RentalInfo {
   customerId: number
 }
 
+
+
 export interface FilmInfo {
   filmName: string
   film_id: number
@@ -80,14 +82,14 @@ export interface IGraphStats {
 export interface IFilm {
   film_id: number;
   title: string;
-  description?: string;
+  description: string;
   release_year: number;
   language_id: number;
-  duracion_de_renta: number;
+  rental_duration: number;
   rental_rate: number;
-  length?: number;
+  length: number;
   replacement_cost: number;
-  rating: string;
+  rating: 'G' | 'PG' | 'PG-13' | 'R' | 'NC-17'; // Assuming the possible values for mpaa_rating
   last_update: string;
   special_features: string[];
   fulltext: string;

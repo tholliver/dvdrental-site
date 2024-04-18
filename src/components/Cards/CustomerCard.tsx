@@ -24,7 +24,7 @@ const CustomerCard: NextPage<customerPageProps> = ({ id }) => {
       {/* <!-- Card Header --> */}
       <div className="py-1 dark:bg-gray-800 rounded-t-lg text-white">
         <h3 className="text-2xl font-bold dark:text-white">
-          {data.userInfo.nombre} {data.userInfo.apellido}
+          {data.userInfo.first_name} {data.userInfo.last_name}
         </h3>
       </div>
 
