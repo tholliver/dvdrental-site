@@ -1,8 +1,9 @@
-import React from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { YellowDVD, BlackDVD, ViolterDVD } from '../SVG'
 
 const Navbar = () => {
+  const [navbarIsOpen, setNavbarIsOpen] = useState(false)
   return (
     <nav className=" border-gray-200 dark:border-gray-600 dark:bg-gray-900">
       <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
@@ -13,12 +14,13 @@ const Navbar = () => {
           <ViolterDVD size={30} />
 
           <span className="self-center font-extrabold  text-2xl  whitespace-nowrap dark:text-white">
-            DVD rental
+            DVD Rental
           </span>
         </Link>
         <button
           data-collapse-toggle="mega-menu-full"
           type="button"
+          onClick={() => setNavbarIsOpen(!navbarIsOpen)}
           className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           aria-controls="mega-menu-full"
           aria-expanded="false"
@@ -43,7 +45,9 @@ const Navbar = () => {
         </button>
         <div
           id="mega-menu-full"
-          className="items-center justify-between font-medium hidden w-full md:flex md:w-auto md:order-1"
+          className={`items-center justify-between font-medium ${
+            navbarIsOpen ? '' : 'hidden'
+          } w-full md:flex md:w-auto md:order-1`}
         >
           <ul className="flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <li>
@@ -63,6 +67,15 @@ const Navbar = () => {
                 Films
               </Link>
             </li>
+
+            <li>
+              <Link
+                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
+                href="/films"
+              >
+                Contacts
+              </Link>
+            </li>
             {/* <li>
               <Link
                 href="#"
@@ -79,13 +92,13 @@ const Navbar = () => {
                 Resources
               </Link>
             </li> */}
-            <li>
+            {/* <li>
               <Link
                 href="#"
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
               ></Link>
-              Contact
-            </li>
+              Contactss
+            </li> */}
           </ul>
         </div>
       </div>

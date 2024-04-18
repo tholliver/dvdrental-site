@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google'
 import { useState } from 'react'
 import Head from 'next/head'
 const inter = Inter({ subsets: ['latin'] })
+import { Card } from '@tremor/react'
 
 import useSWR from 'swr'
 import { fetcher } from '@/services/fetcher'
@@ -10,6 +11,10 @@ import { BarChart } from '@/components/CustomCharts/BarChart'
 import FilmList from '@/components/FilmTable'
 import { LineChart } from '@/components/CustomCharts/LineChart'
 import DashCard from '@/components/Cards/DashCard'
+//  Redux states
+import { decrement, increment } from '@/lib/slices/counterSlice'
+import type { RootState } from '@/lib/store'
+import { IStats } from '@/types'
 
 export default function Home() {
   const oneYearAgoTimestamp = new Date().setFullYear(
@@ -18,19 +23,17 @@ export default function Home() {
   const oneYearAgo = new Date(oneYearAgoTimestamp)
   const oneYearAgoFormatted = oneYearAgo.toISOString().split('T')[0]
 
-  console.log('One Year Ago:', oneYearAgoFormatted)
   const [dateBy, setDateBy] = useState(oneYearAgoFormatted)
-  const { data, isLoading, error } = useSWR(
+  const { data, isLoading, error } = useSWR<IStats>(
     `${API_URI}/stats?startdate=${dateBy}`,
     fetcher
   )
-  // console.log('Here running: ', data)
 
   return (
     <div>
       <Head>
-        <title>DVD rental</title>
-        {/* <meta property="og:title" content="My page title" key="title" /> */}
+        <title>Rental Dashboard</title>
+        {/* <meta property="og:main" content="My main page " key="main" /> */}
       </Head>
 
       <div className="">
@@ -45,12 +48,12 @@ export default function Home() {
           <div className="m-2 bg-slate-800 rounded-lg">
             <BarChart />
           </div>
-          <div className="m-2  bg-slate-800 rounded-lg">
+          <div className="m-2 bg-slate-800 rounded-lg">
             {/* <Line options={options} data={graphData} /> */}
             <LineChart />
           </div>
         </div>
-        <div className="m-4 ">
+        <div className=" ">
           <div id="table-content" className="">
             <FilmList />
           </div>
@@ -70,7 +73,7 @@ export default function Home() {
           </div>
         </div> */}
       </div>
-      <div
+      {/* <div
         id="mega-menu-full-dropdown"
         className=" border-gray-200 shadow-sm bg-gray-50  border-y dark:bg-gray-800 dark:border-gray-600"
       >
@@ -146,7 +149,7 @@ export default function Home() {
             </li>
           </ul>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

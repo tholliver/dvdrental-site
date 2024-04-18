@@ -36,7 +36,7 @@ export function BarChart() {
     data: paymentsData,
     isLoading,
     error,
-  } = useSWR(`${API_URI}/payments/date-pays`, fetcher)
+  } = useSWR<[]>(`${API_URI}/payments/date-pays`, fetcher)
 
   const getLastSeven = paymentsData?.slice(-7)
   const labels = getLastSeven?.map((date: any) => date.date)
@@ -58,7 +58,11 @@ export function BarChart() {
   }
   return (
     <>
-      {isLoading ? <div>Loading</div> : <Bar options={options} data={data} />}
+      {isLoading ? (
+        <div className="grid place-content-center">Loading</div>
+      ) : (
+        <Bar options={options} data={data} />
+      )}
     </>
   )
 }

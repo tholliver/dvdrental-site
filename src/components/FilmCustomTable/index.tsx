@@ -8,36 +8,31 @@ import { fetcher } from '@/services/fetcher'
 import { PrevResults, NextResults } from '../SVG'
 
 interface FilmTableProps {
-  filmtitle: string
+  filmTitle: string
+  category: string
+  pageNumber: number
+  paginationPrevHandler: () => void
+  paginationNextHandler: () => void
   //   handleFilmSearch: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const FilmCustomTable = (props: FilmTableProps) => {
-  const [pageNumber, setPageNumber] = useState(0)
-
   const {
     data: films,
     mutate,
     isLoading,
     error,
   } = useSWR<IFilm[]>(
-    [`${API_URI}/films?offset=${pageNumber}&title=${props.filmtitle}`],
+    [
+      `${API_URI}/films/search?category=${props.category}&title=${props.filmTitle}&offset=${props.pageNumber}`,
+    ],
     fetcher
   )
+  // [`${API_URI}/films?offset=${pageNumber}&title=${props.filmtitle}`]
 
   if (isLoading) return <div>Is Loading</div>
   if (error) return <div>Something happened</div>
 
-  const paginationNextHandler = () => {
-    setPageNumber((number) => number + 10)
-    // console.log(pageNumber)
-  }
-
-  const paginationPrevHandler = () => {
-    if (10 < pageNumber) setPageNumber((number) => number - 10)
-    else setPageNumber(0)
-    // console.log(pageNumber)
-  }
   return (
     <div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -74,11 +69,11 @@ const FilmCustomTable = (props: FilmTableProps) => {
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  {film.titulo}
+                  {film.title}
                 </th>
-                <td className="px-6 py-4">{film.lanzamiento}</td>
+                <td className="px-6 py-4">{film.release_year}</td>
                 <td className="px-6 py-4">{film.rental_rate}</td>
-                <td className="px-6 py-4">{film.duracion}</td>
+                <td className="px-6 py-4">{film.length}</td>
                 <td className="px-6 py-4">{film.rating}</td>
                 <td className="px-6 py-4">
                   <Link
@@ -97,28 +92,28 @@ const FilmCustomTable = (props: FilmTableProps) => {
         <span className="text-sm text-gray-700 dark:text-gray-400">
           Showing{' '}
           <span className="font-semibold text-gray-900 dark:text-white">
-            {pageNumber}
+            {props.pageNumber + 1}
           </span>{' '}
           to{' '}
           <span className="font-semibold text-gray-900 dark:text-white">
-            {pageNumber + 10}
+            {props.pageNumber + 10}
           </span>{' '}
           of{' '}
           <span className="font-semibold text-gray-900 dark:text-white">
             100
           </span>{' '}
-          Entries
+          Films
         </span>
         <div className="inline-flex mt-2 xs:mt-0">
           <button
-            onClick={paginationPrevHandler}
+            onClick={props.paginationPrevHandler}
             className="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           >
             <PrevResults />
             Prev
           </button>
           <button
-            onClick={paginationNextHandler}
+            onClick={props.paginationNextHandler}
             className="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           >
             Next

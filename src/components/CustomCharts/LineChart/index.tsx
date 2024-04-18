@@ -10,10 +10,12 @@ import {
   Legend,
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
+import { BarChart } from '@tremor/react'
 
 import { API_URI } from '@/config'
 import { fetcher } from '@/services/fetcher'
 import useSWR from 'swr'
+import { IGraphStats } from '@/types'
 
 ChartJS.register(
   CategoryScale,
@@ -47,7 +49,7 @@ export function LineChart() {
     data: paymentsData,
     isLoading,
     error,
-  } = useSWR(`${API_URI}/rentals/totals?by=${groupBy}`, fetcher)
+  } = useSWR<[]>(`${API_URI}/rentals/totals?by=${groupBy}`, fetcher)
 
   const getLastSeven = paymentsData?.slice(-7)
   const labels = getLastSeven?.map((date: any) => date.date)
@@ -86,7 +88,13 @@ export function LineChart() {
           year
         </button>
       </div>
-      {isLoading ? <div>Loading</div> : <Line options={options} data={data} />}
+      {isLoading ? (
+        <div className="p-5 m-5">Loading</div>
+      ) : (
+        <div>
+          <Line options={options} data={data} />
+        </div>
+      )}
     </>
   )
 }
