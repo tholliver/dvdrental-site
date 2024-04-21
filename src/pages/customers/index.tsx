@@ -59,9 +59,7 @@ const Customer = () => {
                   {customer.first_name} {customer.last_name}
                 </th>
                 <td className="px-6 py-4"> {customer.email}</td>
-                <td className="px-6 py-4">
-                  {customer.create_date.split('T')[0]}
-                </td>
+                <td className="px-6 py-4">{customer.create_date}</td>
                 <td className="px-6 py-4"> $2999</td>
                 <td className="px-6 py-4 text-right">
                   <a

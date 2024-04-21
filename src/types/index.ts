@@ -25,15 +25,23 @@ export interface CustomerInfo {
   address: Address
 }
 
+interface City {
+  city_id: number
+  city: string
+  country_id: number
+  last_update: string
+}
+
 export interface Address {
   address_id: number
-  nombre: string
-  direccion2: string
-  distrito: string
+  address: string
+  address2: string
+  district: string
   city_id: number
   postal_code: string
   telefono: string
   last_update: Date
+  city: City
 }
 
 // rental

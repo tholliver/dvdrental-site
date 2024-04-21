@@ -26,6 +26,10 @@ const Customer = () => {
 
   return (
     <div className="py-1">
+      <Head>
+        <title>Customers</title>
+        <meta property="og:title" content="Customer" key="title" />
+      </Head>
       <div className="m-4 rounded-t-lg">
         <CustomerCard id={id} />
       </div>
@@ -35,7 +39,7 @@ const Customer = () => {
             <caption className="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
               Films rented
               <p className="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
-                Here the rented films by the user.
+                All rented films by customer
               </p>
             </caption>
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

@@ -85,20 +85,18 @@ const FilmList = () => {
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
-                  Film Name
+                  Film title
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Total
+                  Total made
                 </th>
                 <th scope="col" className="px-6 py-3">
                   rating
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  t. rents
+                  Total rents
                 </th>
-                <th scope="col" className="px-6 py-3">
-                  Action
-                </th>
+                <th scope="col" className="px-6 py-3"></th>
               </tr>
             </thead>
             <tbody className="max-h-[30em] overflow-y-auto">

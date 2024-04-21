@@ -31,13 +31,26 @@ const CustomerCard: NextPage<customerPageProps> = ({ id }) => {
       {/* <!-- Card Body --> */}
       <div className=" ">
         {/* <!-- Customer Address (Left Side) --> */}
-        <div className="">
-          <h4 className="text-md font-medium text-gray-900 dark:text-white">
-            Customer Address:
-          </h4>
-          <p className="text-gray-500 whitespace-normal dark:text-gray-400">
-            {data.userInfo.address.nombre} {data.userInfo.address.distrito}
-          </p>
+        <div className="flex ">
+          <section className="">
+            <h4 className="text-md font-medium text-gray-900 dark:text-white">
+              Customer Address
+            </h4>
+            <p className="text-gray-500 whitespace-normal dark:text-gray-400">
+              {data.userInfo.address.address}, {data.userInfo.address.district}
+            </p>
+          </section>
+
+          {data.userInfo.address.address2 ? (
+            <section className="">
+              <h4 className="text-md font-medium text-gray-900 dark:text-white">
+                Alternative Address:
+              </h4>
+              <p className="text-gray-500 whitespace-normal dark:text-gray-400">
+                {data.userInfo.address.address2}
+              </p>
+            </section>
+          ) : null}
         </div>
 
         {/* <!-- Details (Right Side) --> */}
@@ -50,7 +63,7 @@ const CustomerCard: NextPage<customerPageProps> = ({ id }) => {
               key={data.userInfo.customer_id}
               className="px-4 text-blue-800 text-xs font-medium inline-flex items-center  py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
             >
-              $ {data.paymentsSummary.count}
+              {data.paymentsSummary.count}
             </span>
           </div>
 
