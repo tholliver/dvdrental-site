@@ -44,7 +44,7 @@ export function BarChart(props: BarChartProps) {
   const labels = getLastSeven?.map((date: any) => date.date)
   const dataPayDay = getLastSeven?.map((date: any) => date.daytotal)
 
-  console.log('FOR BAR', dataPayDay, labels)
+  console.log('FOR BAR', getLastSeven)
 
   const data = {
     labels,
