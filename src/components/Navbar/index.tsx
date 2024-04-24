@@ -2,6 +2,13 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { YellowDVD, BlackDVD, ViolterDVD } from '../SVG'
 
+const menuList = [
+  { id: 1, title: 'Home', path: '/' },
+  { id: 2, title: 'Films', path: '/films' },
+  { id: 3, title: 'Customers', path: '/customers' },
+  { id: 4, title: 'Contact', path: '/films' },
+]
+
 const Navbar = () => {
   const [navbarIsOpen, setNavbarIsOpen] = useState(false)
   return (
@@ -50,16 +57,18 @@ const Navbar = () => {
           } w-full md:flex md:w-auto md:order-1`}
         >
           <ul className="flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-            <li>
-              <Link
-                href="/"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
-                aria-current="page"
-              >
-                Home
-              </Link>
-            </li>
-            <li>
+            {menuList.map((item) => (
+              <li key={item.id} onClick={() => setNavbarIsOpen(!navbarIsOpen)}>
+                <Link
+                  href={item.path}
+                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
+                  aria-current="page"
+                >
+                  {item.title}
+                </Link>
+              </li>
+            ))}
+            {/* <li>
               <Link
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
                 href="/films"
@@ -67,7 +76,6 @@ const Navbar = () => {
                 Films
               </Link>
             </li>
-
             <li>
               <Link
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
@@ -77,14 +85,14 @@ const Navbar = () => {
               </Link>
             </li>
 
-            <li>
+            <li onClick={() => setNavbarIsOpen(!navbarIsOpen)}>
               <Link
                 className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
-                href="/films"
+                href="/contact"
               >
                 Contacts
               </Link>
-            </li>
+            </li> */}
             {/* <li>
               <Link
                 href="#"

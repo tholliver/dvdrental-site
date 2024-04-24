@@ -12,35 +12,40 @@ import { Bar } from 'react-chartjs-2'
 import { API_URI } from '@/config'
 import { fetcher } from '@/services/fetcher'
 import useSWR from 'swr'
+import GraphSkeleton from '@/components/Skeletons/GraphSkeleton'
+
+type BarChartProps = {
+  groupBy: string
+}
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
-export const options = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      position: 'top' as const,
+export function BarChart(props: BarChartProps) {
+  const options = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Total Payments per Day',
+      },
     },
-    title: {
-      display: true,
-      text: 'Total Payments per Day',
-    },
-  },
-}
-
-// const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
-
-export function BarChart() {
+  }
   const {
     data: paymentsData,
     isLoading,
     error,
-  } = useSWR<[]>(`${API_URI}/payments/date-pays`, fetcher)
+  } = useSWR<[]>(`${API_URI}/payments/date-pays?by=${props.groupBy}`, fetcher)
 
   const getLastSeven = paymentsData?.slice(-7)
   const labels = getLastSeven?.map((date: any) => date.date)
-  const dataPayDay = getLastSeven?.map((date: any) => date.dayTotal)
+  const dataPayDay = getLastSeven?.map((date: any) => date.daytotal)
+
+  console.log('FOR BAR', dataPayDay, labels)
+
   const data = {
     labels,
     datasets: [
@@ -59,7 +64,9 @@ export function BarChart() {
   return (
     <>
       {isLoading ? (
-        <div className="grid place-content-center">Loading</div>
+        <div className="">
+          <GraphSkeleton />
+        </div>
       ) : (
         <Bar options={options} data={data} />
       )}

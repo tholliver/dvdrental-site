@@ -23,7 +23,7 @@ const Film = () => {
         <div className="w-1/2">
           <img
             src="path/to/movie-poster.jpg"
-            alt="Movie Poster"
+            alt="Film Poster"
             className="w-full rounded-lg"
           />
         </div>
@@ -38,12 +38,12 @@ const Film = () => {
               Details
             </h3>
             <ul className="list-disc list-inside text-gray-400">
-              <li>
+              {/* <li>
                 <span className="font-semibold text-gray-900 dark:text-white">
                   Film ID:{' '}
                 </span>
                 {film?.film_id}
-              </li>
+              </li> */}
               <li>
                 <span className="font-semibold text-gray-900 dark:text-white">
                   Release Date:{' '}

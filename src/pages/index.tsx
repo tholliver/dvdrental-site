@@ -14,6 +14,8 @@ import DashCard from '@/components/Cards/DashCard'
 //  Redux states
 
 import { IStats } from '@/types'
+import GraphSkeleton from '@/components/Skeletons/GraphSkeleton'
+import ChartQuerier from '@/components/ChartQuerier'
 
 export default function Home() {
   const oneYearAgoTimestamp = new Date().setFullYear(
@@ -43,14 +45,15 @@ export default function Home() {
           <DashCard stat={data?.customers} description="Total customers" />
         </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2">
-          <div className="m-2 bg-slate-800 rounded-lg">
+        <div className="">
+          {/* <GraphSkeleton /> */}
+          <ChartQuerier />
+          {/* <div className="m-2 bg-slate-800 rounded-lg">
             <BarChart />
           </div>
           <div className="m-2 bg-slate-800 rounded-lg">
-            {/* <Line options={options} data={graphData} /> */}
             <LineChart />
-          </div>
+          </div> */}
         </div>
         <div className=" ">
           <div id="table-content" className="">

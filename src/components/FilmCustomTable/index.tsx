@@ -10,6 +10,7 @@ import { PrevResults, NextResults } from '../SVG'
 interface FilmTableProps {
   filmTitle: string
   category: string
+  rating: string
   pageNumber: number
   paginationPrevHandler: () => void
   paginationNextHandler: () => void
@@ -19,16 +20,14 @@ interface FilmTableProps {
 const FilmCustomTable = (props: FilmTableProps) => {
   const {
     data: films,
-    mutate,
     isLoading,
     error,
   } = useSWR<IFilm[]>(
     [
-      `${API_URI}/films/search?category=${props.category}&title=${props.filmTitle}&offset=${props.pageNumber}`,
+      `${API_URI}/films/search?category=${props.category}&title=${props.filmTitle}&rating=${props.rating}&offset=${props.pageNumber}`,
     ],
     fetcher
   )
-  // [`${API_URI}/films?offset=${pageNumber}&title=${props.filmtitle}`]
 
   if (isLoading) return <div>Is Loading</div>
   if (error) return <div>Something happened</div>

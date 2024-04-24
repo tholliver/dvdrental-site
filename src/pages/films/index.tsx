@@ -58,7 +58,7 @@ const Films = () => {
 
       <h3 className="p-4 text-3xl font-bold dark:text-white">Films list</h3>
       <div className=" px-4 shadow-md sm:rounded-lg">
-        <div className="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+        <div className="flex items-center rounded-t-lg justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
           <div className="flex space-x-4">
             <div className="relative">
               <button
@@ -127,6 +127,7 @@ const Films = () => {
         <FilmCustomTable
           filmTitle={filmTitle}
           category={category}
+          rating={rating}
           pageNumber={pageNumber}
           paginationNextHandler={paginationNextHandler}
           paginationPrevHandler={paginationPrevHandler}
