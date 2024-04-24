@@ -51,6 +51,7 @@ export function LineChart(props: LineChartProps) {
   const getLastSeven = paymentsData?.slice(-7)
   const labels = getLastSeven?.map((date: any) => date.date)
   const dataPayDay = getLastSeven?.map((date: any) => date.count)
+
   const data = {
     labels,
     datasets: [
