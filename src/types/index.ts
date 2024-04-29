@@ -79,6 +79,7 @@ export interface IStats {
   rents: string
   totalMade: string
   units: string
+  films: string
   customers: string
 }
 

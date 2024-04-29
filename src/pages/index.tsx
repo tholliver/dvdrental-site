@@ -30,6 +30,8 @@ export default function Home() {
     fetcher
   )
 
+  console.log('CARD STATS', data)
+
   return (
     <div>
       <Head>
@@ -38,22 +40,16 @@ export default function Home() {
       </Head>
 
       <div className="">
-        <section className="p-2 flex flex-col md:flex-row justify-start gap-5">
+        <section className="p-2 grid grid-cols-2 md:grid-flow-col gap-4">
           <DashCard stat={data?.rents} description="Total rents" />
-          <DashCard stat={data?.totalMade} description="Total payments" />
+          <DashCard stat={data?.totalMade} description="Total payments" />{' '}
+          <DashCard stat={data?.films} description="Total films" />
           <DashCard stat={data?.units} description="Total inventory" />
           <DashCard stat={data?.customers} description="Total customers" />
         </section>
 
         <div className="">
-          {/* <GraphSkeleton /> */}
           <ChartQuerier />
-          {/* <div className="m-2 bg-slate-800 rounded-lg">
-            <BarChart />
-          </div>
-          <div className="m-2 bg-slate-800 rounded-lg">
-            <LineChart />
-          </div> */}
         </div>
         <div className=" ">
           <div id="table-content" className="">
