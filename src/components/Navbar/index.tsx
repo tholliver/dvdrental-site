@@ -12,8 +12,8 @@ const menuList = [
 const Navbar = () => {
   const [navbarIsOpen, setNavbarIsOpen] = useState(false)
   return (
-    <nav className=" border-gray-200 dark:border-gray-600 dark:bg-gray-900">
-      <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
+    <nav className="border-gray-200 dark:border-gray-600 dark:bg-gray-900">
+      <div className="container flex flex-wrap justify-between items-center mx-auto p-4">
         <Link
           href="/"
           className="flex items-center space-x-3 rtl:space-x-reverse"
@@ -68,54 +68,6 @@ const Navbar = () => {
                 </Link>
               </li>
             ))}
-            {/* <li>
-              <Link
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
-                href="/films"
-              >
-                Films
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
-                href="/customers"
-              >
-                Customers
-              </Link>
-            </li>
-
-            <li onClick={() => setNavbarIsOpen(!navbarIsOpen)}>
-              <Link
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
-                href="/contact"
-              >
-                Contacts
-              </Link>
-            </li> */}
-            {/* <li>
-              <Link
-                href="#"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
-              >
-                Marketplace
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
-              >
-                Resources
-              </Link>
-            </li> */}
-            {/* <li>
-              <Link
-                href="#"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
-              ></Link>
-              Contactss
-            </li> */}
           </ul>
         </div>
       </div>

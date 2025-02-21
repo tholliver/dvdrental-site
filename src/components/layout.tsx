@@ -7,7 +7,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <Navbar />
-      <main className="dark:bg-slate-700 min-h-screen">{children}</main>
+      <main className="dark:border-gray-600 dark:bg-slate-950">{children}</main>
     </>
   )
 }
