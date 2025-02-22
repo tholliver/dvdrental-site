@@ -78,7 +78,7 @@ export const filmSchema = pgTable('film', {
     rental_rate: numeric('rental_rate').notNull().default('4.99'),
     length: smallint('length'),
     replacement_cost: numeric('replacement_cost').notNull().default('19.99'),
-    rating: ratingEnum('rating').default('G'),
+    rating: ratingEnum('rating').default('G').notNull(),
     last_update: timestamp('last_update').notNull().defaultNow(),
     special_features: text('special_features'), // NOTE: Special handling may be needed for array of text.
     fulltext: tsVector('fulltext').notNull(),
@@ -224,6 +224,8 @@ export const rentalSchemaRelationships = relations(rentalSchema, ({ one }) => ({
     }),
 }))
 
+export type SelectCategory = typeof categorySchema.$inferSelect;
+export type SelectFilm = typeof filmSchema.$inferSelect;
 // export const inventoryRelationship = relations(rentalSchema, ({ one }) => ({
 //     rental: one(rentalSchema, {
 //         fields: [rentalSchema.inventory_id],

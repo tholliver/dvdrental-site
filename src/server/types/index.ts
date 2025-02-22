@@ -32,6 +32,14 @@ export type Rental = {
     rents: number;
 };
 
+export type TopRentFilm = {
+    film_id: number;
+    filmName: string;
+    amountMade: number;
+    rating: "G" | "PG" | "PG-13" | "R" | "NC-17";
+    rentedTimes: number;
+}
+
 export type ResponseData = {
     payments: Payment[];
 };
@@ -39,3 +47,7 @@ export type ResponseData = {
 export type RentalResponseData = {
     rentals: Rental[];
 };
+
+export type TopRentalResponse = {
+    topRentedFilms: TopRentFilm[]
+}  

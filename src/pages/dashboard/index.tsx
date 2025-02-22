@@ -1,18 +1,5 @@
 import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
 import { Calendar, Contact, Film, Package } from 'lucide-react'
-import Link from 'next/link'
-import {
-  Bar,
-  BarChart as RechartsBar,
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts'
-
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -28,52 +15,8 @@ import useSWR from 'swr'
 import { fetcher } from '@/services/fetcher'
 import { useState } from 'react'
 import { Payment, Rental } from '@/server/types'
-import BashBarTools from '@/components/CustomCharts/ShadBar'
-
-// Mock data for charts
-
-const topFilms = [
-  { title: 'Shock Cabin', totalMade: 96.71, rating: 'PG-13', totalRents: 29 },
-  {
-    title: 'Juggler Hardly',
-    totalMade: 86.71,
-    rating: 'PG-13',
-    totalRents: 29,
-  },
-  {
-    title: 'Scalawag Duck',
-    totalMade: 157.71,
-    rating: 'NC-17',
-    totalRents: 29,
-  },
-  {
-    title: 'Ridgemont Submarine',
-    totalMade: 110.72,
-    rating: 'PG-13',
-    totalRents: 28,
-  },
-  {
-    title: 'Rocketeer Mother',
-    totalMade: 97.72,
-    rating: 'PG-13',
-    totalRents: 28,
-  },
-  {
-    title: 'Rugrats Shakespeare',
-    totalMade: 67.72,
-    rating: 'PG-13',
-    totalRents: 28,
-  },
-  { title: 'Frost Head', totalMade: 74.72, rating: 'PG', totalRents: 28 },
-  {
-    title: 'Apache Divine',
-    totalMade: 160.72,
-    rating: 'NC-17',
-    totalRents: 28,
-  },
-  { title: 'Grit Clockwork', totalMade: 97.72, rating: 'PG', totalRents: 28 },
-  { title: 'Rush Goodfellas', totalMade: 81.72, rating: 'PG', totalRents: 28 },
-]
+import DialCharts from '@/components/CustomCharts/DialCharts'
+import TopFilmsTable from '@/components/FilmTable'
 
 type AllStats = {
   totalRents: number
@@ -113,26 +56,9 @@ export const getServerSideProps: GetServerSideProps<{
 export default function DashboardPage({
   allstats,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [groupBy, setGroupBy] = useState('day')
-  const {
-    data: paymentData,
-    isLoading: isLoadingPayments,
-    error: paymentFetchError,
-  } = useSWR<Payment[]>(`/api/payments?by=${groupBy}`, fetcher)
-  const {
-    data: rentalData,
-    isLoading,
-    error,
-  } = useSWR<Rental[]>(`/api/rentals?by=${groupBy}`, fetcher)
-
-  console.log('USE HERE:', paymentData, rentalData)
-
-  if (paymentFetchError) return 'Error'
-
   return (
     <div className="flex flex-1 justify-center">
       <div className="container min-h-screen">
-        <BashBarTools />
         {/* <header className="border-b border-slate-800">
           <div className=" flex h-16 items-center px-4">
             <div className="flex items-center gap-2">
@@ -210,77 +136,10 @@ export default function DashboardPage({
             </Card>
           </div>
 
-          <div className="mt-8">
-            <div className="mb-4 flex items-center gap-2">
-              <span className="text-sm text-slate-400">
-                Showing charts by day
-              </span>
-              <Button size="sm" variant="outline" className="text-white">
-                day
-              </Button>
-              <Button size="sm" variant="ghost" className="text-slate-400">
-                month
-              </Button>
-              <Button size="sm" variant="ghost" className="text-slate-400">
-                year
-              </Button>
-            </div>
+          <DialCharts />
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <Card className="bg-slate-900 p-4">
-                <div className="mb-4 text-sm text-slate-400">
-                  Total Payments per Day
-                </div>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RechartsBar data={paymentData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                      <XAxis dataKey="date" stroke="#94a3b8" />
-                      <YAxis stroke="#94a3b8" />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: '#1e293b',
-                          border: 'none',
-                          borderRadius: '8px',
-                        }}
-                      />
-                      <Bar dataKey="amount" fill="#be185d" />
-                    </RechartsBar>
-                  </ResponsiveContainer>
-                </div>
-              </Card>
-
-              <Card className="bg-slate-900 p-4">
-                <div className="mb-4 text-sm text-slate-400">
-                  Total rents per day
-                </div>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={rentalData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                      <XAxis dataKey="date" stroke="#94a3b8" />
-                      <YAxis stroke="#94a3b8" />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: '#1e293b',
-                          border: 'none',
-                          borderRadius: '8px',
-                        }}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="rents"
-                        stroke="#3b82f6"
-                        strokeWidth={2}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </Card>
-            </div>
-          </div>
-
-          <div className="mt-8">
+          <TopFilmsTable />
+          {/* <div className="mt-2">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-xl font-bold text-white">Top rented films</h2>
               <Button variant="outline" size="sm" className="text-white">
@@ -331,7 +190,7 @@ export default function DashboardPage({
                 </TableBody>
               </Table>
             </Card>
-          </div>
+          </div> */}
         </main>
       </div>
     </div>

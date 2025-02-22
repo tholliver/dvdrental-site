@@ -24,7 +24,7 @@ const FilmCustomTable = (props: FilmTableProps) => {
     error,
   } = useSWR<IFilm[]>(
     [
-      `${API_URI}/films/search?category=${props.category}&title=${props.filmTitle}&rating=${props.rating}&offset=${props.pageNumber}`,
+      `/api/films/search?category=${props.category}&title=${props.filmTitle}&rating=${props.rating}&offset=${props.pageNumber}`,
     ],
     fetcher
   )

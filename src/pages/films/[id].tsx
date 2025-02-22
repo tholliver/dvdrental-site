@@ -4,18 +4,25 @@ import useSWR from 'swr'
 import { API_URI } from '@/config'
 import { fetcher } from '@/services/fetcher'
 import { IFilm } from '@/types'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const Film = () => {
   const router = useRouter()
   const { id } = router.query
 
+  // TODO [ make rental ratio of the current movie]
   const {
     data: film,
     isLoading,
     error,
   } = useSWR<IFilm>(`${API_URI}/films/${id}`, fetcher)
 
-  if (isLoading) return <div>loading</div>
+  if (isLoading)
+    return (
+      <div className="flex flex-col space-y-3">
+        <Skeleton className="rounded-xl rounded-b-none h-[500px] w-full" />
+      </div>
+    )
 
   return (
     <div>

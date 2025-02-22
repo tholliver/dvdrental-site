@@ -1,11 +1,10 @@
-import { db } from '@/server/db'
 import { QueryRentals } from "@/server/db/queries/query-rentals"
 import type { Rental, RentalResponseData } from '@/server/types'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<RentalResponseData | { message: 'Error' }>
+    res: NextApiResponse<RentalResponseData | { message: 'Error getting payment data on API' }>
 ) {
     const { by } = req.query
     try {
@@ -18,6 +17,6 @@ export default async function handler(
         res.status(200).json({ rentals })
     } catch (error) {
         console.log('Error getting payment data on API.');
-        res.status(200).json({ message: 'Error' })
+        res.status(200).json({ message: 'Error getting payment data on API' })
     }
 }

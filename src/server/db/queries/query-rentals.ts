@@ -33,9 +33,9 @@ export const QueryRentals = {
             .select({
                 film_id: filmSchema.film_id,
                 filmName: filmSchema.title,
-                amountMade: sum(paymentSchema.amount),
+                amountMade: sql`sum(${paymentSchema.amount})`.mapWith(Number),
                 rating: filmSchema.rating,
-                rentedTimes: sql`count(${filmSchema.film_id})`,
+                rentedTimes: sql<number>`count(${filmSchema.film_id})`,
             })
             .from(filmSchema)
             .innerJoin(inventorySchema, eq(filmSchema.film_id, inventorySchema.film_id))
@@ -62,9 +62,9 @@ export const QueryRentals = {
             .select({
                 film_id: filmSchema.film_id,
                 filmName: filmSchema.title,
-                amountMade: sum(paymentSchema.amount),
+                amountMade: sql`sum(${paymentSchema.amount})`.mapWith(Number),
                 rating: filmSchema.rating,
-                rentedTimes: sql`count(${filmSchema.film_id})`,
+                rentedTimes: sql<number>`count(${filmSchema.film_id})`,
             })
             .from(filmSchema)
             .innerJoin(inventorySchema, eq(filmSchema.film_id, inventorySchema.film_id))

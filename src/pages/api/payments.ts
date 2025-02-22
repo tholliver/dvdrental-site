@@ -8,6 +8,8 @@ export default async function handler(
     res: NextApiResponse<ResponseData | { message: 'Error' }>
 ) {
     const { by } = req.query
+    console.log('Params recived; ', by);
+
     try {
         const queryResult = await QueryPayments.GetAllPaymentsByDate(String(by))
         const payments: Payment[] = queryResult.rows.map((row: any) => ({
@@ -17,7 +19,7 @@ export default async function handler(
 
         res.status(200).json({ payments })
     } catch (error) {
-        console.log('Error getting payment data on API.');
+        console.log('Error getting payment data on API.', error);
         res.status(200).json({ message: 'Error' })
     }
 }

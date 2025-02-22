@@ -7,7 +7,8 @@ import { ICategory, ratings, FilmRating } from '@/types'
 import { ArrowDownIcon, SearchIcon } from '@/components/SVG'
 import Head from 'next/head'
 import FilmCustomTable from '@/components/FilmCustomTable'
-import { Dropdown } from '@/components/Dropdowns'
+import DropdownComponents from '@/components/Dropdowns'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const Films = () => {
   const [filmTitle, setFilmTitle] = useState('')
@@ -22,7 +23,7 @@ const Films = () => {
     mutate,
     isLoading,
     error,
-  } = useSWR<ICategory[]>([`${API_URI}/categories`], fetcher)
+  } = useSWR<ICategory[]>([`/api/categories`], fetcher)
 
   const handleFilmSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
@@ -48,6 +49,24 @@ const Films = () => {
   const paginationPrevHandler = () => {
     if (10 < pageNumber) setPageNumber((number) => number - 10)
     else setPageNumber(0)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col space-y-3">
+        <Skeleton className="rounded-xl rounded-b-none h-[72px] w-full" />
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-8 w-full" />
+          <Skeleton className="h-8 w-full" />
+        </div>
+      </div>
+    )
   }
   return (
     <div>
@@ -79,7 +98,7 @@ const Films = () => {
                   categoryIsOpen ? '' : 'hidden'
                 }  bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 z-30`}
               >
-                <Dropdown
+                <DropdownComponents.Dropdown
                   items={categories}
                   handleFilter={handleCategoryFilter}
                 />
@@ -104,7 +123,10 @@ const Films = () => {
                   ratingIsOpen ? '' : 'hidden'
                 }  bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 z-30`}
               >
-                <Dropdown items={ratings} handleFilter={handleRatingFilter} />
+                <DropdownComponents.Dropdown
+                  items={ratings}
+                  handleFilter={handleRatingFilter}
+                />
               </div>
             </div>
           </div>
