@@ -1,5 +1,5 @@
 import { db } from "@/server/db"
-import { categorySchema } from "../schema"
+import { categorySchema } from "@/server/db/schemas"
 
 export const QueryCategories = {
     GetAll: function () {

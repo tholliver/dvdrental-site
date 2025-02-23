@@ -1,6 +1,6 @@
 import { count, sql } from "drizzle-orm"
 import { db } from ".."
-import { customerSchema, filmSchema, inventorySchema, paymentSchema, rentalSchema } from "../schema"
+import { customerSchema, filmSchema, inventorySchema, paymentSchema, rentalSchema } from "@/server/db/schemas"
 
 export const QueryStats =
 {

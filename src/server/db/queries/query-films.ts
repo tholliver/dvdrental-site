@@ -1,5 +1,5 @@
 import { db } from "@/server/db";
-import { categorySchema, film_category, filmSchema } from "../schema";
+import { categorySchema, film_category, filmSchema } from "@/server/db/schemas";
 import { getTableColumns, ilike, eq, and, SQL } from "drizzle-orm";
 import { FilmRating } from "@/server/types";
 

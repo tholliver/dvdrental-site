@@ -6,7 +6,6 @@ import { fetcher } from '@/services/fetcher'
 
 import { API_URI } from '@/config'
 import TableSkeleton from '@/components/TableSkeleton'
-import CustomerCard from '@/components/Cards/CustomerCard'
 
 const Customer = () => {
   const { id } = useRouter().query
@@ -30,9 +29,7 @@ const Customer = () => {
         <title>Customers</title>
         <meta property="og:title" content="Customer" key="title" />
       </Head>
-      <div className="m-4 rounded-t-lg">
-        <CustomerCard id={id} />
-      </div>
+      <div className="m-4 rounded-t-lg">{/* <CustomerCard id={id} /> */}</div>
       <div id="rented-films-table" className="px-4">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

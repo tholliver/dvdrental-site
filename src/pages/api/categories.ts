@@ -1,6 +1,6 @@
 import { QueryCategories } from '@/server/db/queries/query-categories';
 import { QueryPayments } from '@/server/db/queries/query-payments'
-import { SelectCategory } from '@/server/db/schema';
+import { SelectCategory } from '@/server/db/schemas/index';
 import type { Payment, ResponseData } from '@/server/types'
 import type { NextApiRequest, NextApiResponse } from 'next'
 

@@ -1,5 +1,5 @@
 import { QueryFilms } from "@/server/db/queries/query-films";
-import { SelectFilm } from "@/server/db/schema";
+import { SelectFilm } from "@/server/db/schemas";
 import { NextApiRequest, NextApiResponse } from "next/types";
 
 export default async function searchFilms(

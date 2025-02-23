@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { API_URI } from '@/config'
 import { fetcher } from '@/services/fetcher'
 import React from 'react'
 import useSWR from 'swr'

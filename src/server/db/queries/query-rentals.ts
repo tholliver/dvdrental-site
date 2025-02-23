@@ -2,7 +2,7 @@ import { db } from "@/server/db"
 import { GroupByType } from "@/server/types"
 import { getGroupByKey, timeLapseConverter } from "@/server/utils"
 import { sql, eq, sum, between, desc } from "drizzle-orm"
-import { filmSchema, inventorySchema, paymentSchema, rentalSchema } from "../schema"
+import { filmSchema, inventorySchema, paymentSchema, rentalSchema } from "@/server/db/schemas"
 
 export const QueryRentals = {
     GetCustomerRentals: function (customerId: number) {

@@ -1,20 +1,7 @@
 import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
 import { Calendar, Contact, Film, Package } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import { QueryStats } from '@/server/db/queries/query-stats'
-import useSWR from 'swr'
-import { fetcher } from '@/services/fetcher'
-import { useState } from 'react'
-import { Payment, Rental } from '@/server/types'
 import DialCharts from '@/components/CustomCharts/DialCharts'
 import TopFilmsTable from '@/components/FilmTable'
 
@@ -137,60 +124,7 @@ export default function DashboardPage({
           </div>
 
           <DialCharts />
-
           <TopFilmsTable />
-          {/* <div className="mt-2">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-white">Top rented films</h2>
-              <Button variant="outline" size="sm" className="text-white">
-                All time
-              </Button>
-            </div>
-            <Card className="bg-slate-900">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-slate-400">FILM TITLE</TableHead>
-                    <TableHead className="text-slate-400">TOTAL MADE</TableHead>
-                    <TableHead className="text-slate-400">RATING</TableHead>
-                    <TableHead className="text-slate-400">
-                      TOTAL RENTS
-                    </TableHead>
-                    <TableHead className="text-right text-slate-400">
-                      ACTIONS
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {topFilms.map((film) => (
-                    <TableRow key={film.title}>
-                      <TableCell className="font-medium text-white">
-                        {film.title}
-                      </TableCell>
-                      <TableCell className="text-slate-300">
-                        ${film.totalMade}
-                      </TableCell>
-                      <TableCell className="text-slate-300">
-                        {film.rating}
-                      </TableCell>
-                      <TableCell className="text-slate-300">
-                        {film.totalRents}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-blue-500"
-                        >
-                          Details
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Card>
-          </div> */}
         </main>
       </div>
     </div>

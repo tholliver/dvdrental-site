@@ -14,7 +14,6 @@ interface FilmTableProps {
   pageNumber: number
   paginationPrevHandler: () => void
   paginationNextHandler: () => void
-  //   handleFilmSearch: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const FilmCustomTable = (props: FilmTableProps) => {
@@ -34,7 +33,7 @@ const FilmCustomTable = (props: FilmTableProps) => {
 
   return (
     <div>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-gray-900">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -58,11 +57,11 @@ const FilmCustomTable = (props: FilmTableProps) => {
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-gray-900">
             {films?.map((film: IFilm, i: number) => (
               <tr
                 key={film.film_id}
-                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                className="border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
                 <th
                   scope="row"
