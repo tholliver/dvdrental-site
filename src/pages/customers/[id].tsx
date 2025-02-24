@@ -1,23 +1,18 @@
 import useSWR from 'swr'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { CustomerData, RentalInfo } from '@/types'
+import { RentalInfo } from '@/types'
 import { fetcher } from '@/services/fetcher'
-
-import { API_URI } from '@/config'
-import TableSkeleton from '@/components/TableSkeleton'
+import HeadlessTable from '@/components/CustomSkeletons/HeadlessTable'
 
 const Customer = () => {
   const { id } = useRouter().query
-  const { data, isLoading, error } = useSWR<[]>(
-    `${API_URI}/rentals/${id}`,
-    fetcher
-  )
+  const { data, isLoading, error } = useSWR<[]>(`/api/rentals/${id}`, fetcher)
 
   if (isLoading)
     return (
       <div className="m-4">
-        <TableSkeleton numberRows={10} />
+        <HeadlessTable rows={10} heightRow="8" />
       </div>
     )
 

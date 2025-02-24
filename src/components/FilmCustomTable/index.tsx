@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import useSWR from 'swr'
 import Link from 'next/link'
 import { SearchIcon } from '../SVG'
@@ -6,6 +6,8 @@ import { API_URI } from '@/config'
 import { IFilm } from '@/types'
 import { fetcher } from '@/services/fetcher'
 import { PrevResults, NextResults } from '../SVG'
+import TableSkeleton from '../CustomSkeletons/ShadowTable'
+import HeadlessTable from '../CustomSkeletons/HeadlessTable'
 
 interface FilmTableProps {
   filmTitle: string
@@ -28,14 +30,17 @@ const FilmCustomTable = (props: FilmTableProps) => {
     fetcher
   )
 
-  if (isLoading) return <div>Is Loading</div>
+  if (isLoading) {
+    return <HeadlessTable heightRow="8" rows={12} />
+  }
+
   if (error) return <div>Something happened</div>
 
   return (
-    <div>
+    <div id="film-table">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-gray-900">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full text-sm text-left rtl:text-right">
+          <thead className="text-xs text-slate-200 uppercase dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Film title
@@ -61,11 +66,11 @@ const FilmCustomTable = (props: FilmTableProps) => {
             {films?.map((film: IFilm, i: number) => (
               <tr
                 key={film.film_id}
-                className="border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                className="border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
               >
                 <th
                   scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  className="px-6 py-4 font-medium whitespace-nowrap text-white"
                 >
                   {film.title}
                 </th>

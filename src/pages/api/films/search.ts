@@ -25,7 +25,6 @@ export default async function searchFilms(
     }
 }
 
-
 // export default async function searchFilms(req: NextApiRequest,
 //     res: NextApiResponse<SelectFilm[]>) {
 //     const { category, rating, title, offset } = req.query;

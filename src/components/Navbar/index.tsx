@@ -7,6 +7,14 @@ import { signIn, useSession, signUp } from '@/lib/auth-client'
 const menuList = [
   { id: 1, title: 'Home', path: '/' },
   { id: 2, title: 'Films', path: '/films' },
+  { id: 3, title: 'Stores', path: '/stores' },
+  { id: 4, title: 'Contact', path: '/contact' },
+  { id: 5, title: 'About', path: '/about' },
+]
+
+const userLinkList = [
+  { id: 1, title: 'Dashboard', path: '/dashboard' },
+  { id: 2, title: 'Films', path: '/films' },
   { id: 3, title: 'Customers', path: '/customers' },
   { id: 4, title: 'Contact', path: '/films' },
 ]
@@ -15,76 +23,110 @@ type NavbarProp = {
   userRole?: string
 }
 
-const Navbar = ({ isSignedIn, userRole }: NavbarProp) => {
-  const [navbarIsOpen, setNavbarIsOpen] = useState(false)
+const Navbar = () => {
   const { data: session, isPending, error } = useSession()
+  const [navbarIsOpen, setNavbarIsOpen] = useState(false)
+  const [userOpts, setUserOpts] = useState(false)
 
   return (
-    <nav className="border-gray-200 dark:border-gray-600 dark:bg-gray-900">
-      <div className="container flex flex-wrap justify-between items-center mx-auto p-4">
-        <Link
-          href="/"
-          className="flex items-center space-x-3 rtl:space-x-reverse"
-        >
+    <nav className="border-b border-gray-200 dark:border-gray-600 dark:bg-gray-900">
+      <div className="container mx-auto flex items-center justify-between p-4">
+        {/* Logo */}
+        <Link href="/" className="flex items-center space-x-3">
           <ViolterDVD size={30} />
-
-          <span className="self-center font-extrabold  text-2xl  whitespace-nowrap dark:text-white">
-            DVD Rental
-          </span>
+          <span className="text-2xl font-extrabold text-white">DVD Rental</span>
         </Link>
-        <div className="flex flex-row items-center">
-          <Avatar>
-            <AvatarImage src={session?.user.image} />
-            <AvatarFallback>MK</AvatarFallback>
-          </Avatar>
+
+        {/* Navbar Links */}
+        <div className="hidden md:flex space-x-6">
+          {menuList.map((item) => (
+            <Link
+              key={item.id}
+              href={item.path}
+              className="text-white hover:text-blue-500"
+            >
+              {item.title}
+            </Link>
+          ))}
+        </div>
+
+        {/* User Avatar & Mobile Menu Button */}
+        <div className="flex items-center space-x-4">
+          {/* User Button */}
+          <div className="relative">
+            <button
+              onClick={() => setUserOpts(!userOpts)}
+              className="w-10 h-10 rounded-full border border-gray-400"
+            >
+              <img
+                className="w-full h-full rounded-full"
+                src="/docs/images/people/profile-picture-3.jpg"
+                alt="User"
+              />
+            </button>
+
+            {/* Dropdown */}
+            {userOpts && (
+              <div className="absolute z-50 right-0 mt-3 w-48 bg-gray-800 text-white rounded-lg shadow-lg">
+                <div className="px-4 py-3">
+                  <span className="block text-sm">{session?.user.name}</span>
+                  <span className="block text-xs text-gray-400">
+                    {session?.user.email || 'No user'}
+                  </span>
+                </div>
+                <ul className="py-2">
+                  {userLinkList.map((userlink) => (
+                    <li key={userlink.id}>
+                      <Link
+                        href={userlink.path}
+                        className="block px-4 py-2 hover:bg-gray-700"
+                      >
+                        {userlink.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Menu Button */}
           <button
-            data-collapse-toggle="mega-menu-full"
-            type="button"
             onClick={() => setNavbarIsOpen(!navbarIsOpen)}
-            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-            aria-controls="mega-menu-full"
-            aria-expanded="false"
+            className="md:hidden p-2 text-gray-400 hover:bg-gray-700 rounded-lg"
           >
-            <span className="sr-only">Open main menu</span>
             <svg
-              className="w-5 h-5"
-              width={30}
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6"
               fill="none"
-              viewBox="0 0 17 14"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
-                stroke="currentColor"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
-                d="M1 1h15M1 7h15M1 13h15"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16m-7 6h7"
               />
             </svg>
           </button>
         </div>
-        <div
-          id="mega-menu-full"
-          className={`items-center justify-between font-medium ${
-            navbarIsOpen ? '' : 'hidden'
-          } w-full md:flex md:w-auto md:order-1`}
-        >
-          <ul className="flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-            {menuList.map((item) => (
-              <li key={item.id} onClick={() => setNavbarIsOpen(!navbarIsOpen)}>
-                <Link
-                  href={item.path}
-                  className="block py-2 px-3 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
-                  aria-current="page"
-                >
-                  {item.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
       </div>
+
+      {/* Mobile Menu */}
+      {navbarIsOpen && (
+        <div className="md:hidden bg-gray-800 text-white p-4">
+          {menuList.map((item) => (
+            <Link
+              key={item.id}
+              href={item.path}
+              className="block py-2 px-4 hover:bg-gray-700"
+              onClick={() => setNavbarIsOpen(false)}
+            >
+              {item.title}
+            </Link>
+          ))}
+        </div>
+      )}
     </nav>
   )
 }

@@ -64,7 +64,7 @@ const DropdownStyled = (props: DropdownStyledProps) => {
 // export default DropdownStyled
 
 type DropdownProps<T> = {
-  items: T[] | undefined
+  items: T[] | undefined | null
   handleFilter: (name: string) => void
 }
 

@@ -8,6 +8,7 @@ import Head from 'next/head'
 import FilmCustomTable from '@/components/FilmCustomTable'
 import DropdownComponents from '@/components/Dropdowns'
 import { Skeleton } from '@/components/ui/skeleton'
+import TableSkeleton from '@/components/CustomSkeletons/ShadowTable'
 
 const Films = () => {
   const [filmTitle, setFilmTitle] = useState('')
@@ -51,32 +52,19 @@ const Films = () => {
   }
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col space-y-3">
-        <Skeleton className="rounded-xl rounded-b-none h-[72px] w-full" />
-        <div className="space-y-2">
-          <Skeleton className="h-8 w-full" />
-          <Skeleton className="h-8 w-full" />
-          <Skeleton className="h-8 w-full" />
-          <Skeleton className="h-8 w-full" />
-          <Skeleton className="h-8 w-full" />
-          <Skeleton className="h-8 w-full" />
-          <Skeleton className="h-8 w-full" />
-          <Skeleton className="h-8 w-full" />
-        </div>
-      </div>
-    )
+    return <TableSkeleton heightRow="8" rows={12} />
   }
+
   return (
-    <div>
+    <div className="flex flex-1 justify-center">
       <Head>
         <title>Films</title>
         <meta property="og:title" content="Films" key="title" />
       </Head>
 
-      <h3 className="p-4 text-3xl font-bold dark:text-white">Films list</h3>
-      <div className=" px-4 shadow-md sm:rounded-lg">
-        <div className="flex items-center rounded-t-lg justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+      <div className="container shadow-md sm:rounded-lg">
+        <h3 className="py-4 text-3xl font-bold dark:text-white">Films list</h3>
+        <div className="flex items-center rounded-t-lg justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 dark:bg-gray-900">
           <div className="flex space-x-4">
             <div className="relative">
               <button
@@ -98,7 +86,7 @@ const Films = () => {
                 }  bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 z-30`}
               >
                 <DropdownComponents.Dropdown
-                  items={categories}
+                  items={categories ?? []}
                   handleFilter={handleCategoryFilter}
                 />
               </div>
@@ -123,7 +111,7 @@ const Films = () => {
                 }  bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 z-30`}
               >
                 <DropdownComponents.Dropdown
-                  items={ratings}
+                  items={ratings ?? []}
                   handleFilter={handleRatingFilter}
                 />
               </div>

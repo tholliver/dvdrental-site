@@ -15,8 +15,8 @@ const Layout = ({ children }: LayoutProps) => {
       <Head>
         <title>% | DVD Renral</title>
       </Head>
-      <Navbar isSignedIn={!!session?.user} userRole={session?.user.role} />
-      <main className="dark:border-gray-600 dark:bg-slate-950">{children}</main>
+      <Navbar />
+      <main className="bg-slate-950">{children}</main>
     </>
   )
 }

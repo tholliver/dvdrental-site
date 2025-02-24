@@ -82,8 +82,14 @@ export function AuthForm() {
     }
   }
 
-  function onSignInSubmit(values: z.infer<typeof signInSchema>) {
+  async function onSignInSubmit(values: z.infer<typeof signInSchema>) {
     console.log('Sign In:', values)
+    const { data, error } = await signIn.email({
+      email: values.email,
+      password: values.password,
+    })
+    console.log('Here the massa', data)
+
     // Here you would typically send a request to your authentication API
   }
 
