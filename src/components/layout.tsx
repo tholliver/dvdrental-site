@@ -1,22 +1,21 @@
 import React from 'react'
-import Navbar from './Navbar'
 import Head from 'next/head'
-import { signIn, useSession, signUp } from '@/lib/auth-client'
+import BetterNav from './Navbar/BetterNav'
+import Footer from './Footer'
 
 interface LayoutProps {
   children: React.ReactNode
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const { data: session, isPending, error } = useSession()
-
   return (
     <>
       <Head>
         <title>% | DVD Renral</title>
       </Head>
-      <Navbar />
+      <BetterNav />
       <main className="bg-slate-950">{children}</main>
+      <Footer />
     </>
   )
 }

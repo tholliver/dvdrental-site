@@ -20,7 +20,6 @@ const Films = () => {
 
   const {
     data: categories,
-    mutate,
     isLoading,
     error,
   } = useSWR<ICategory[]>([`/api/categories`], fetcher)
@@ -40,15 +39,6 @@ const Films = () => {
     setRating(paramRating)
     setPageNumber(0)
     setRatingOpen(!ratingIsOpen)
-  }
-  //Pagination
-  const paginationNextHandler = () => {
-    setPageNumber((number) => number + 10)
-  }
-
-  const paginationPrevHandler = () => {
-    if (10 < pageNumber) setPageNumber((number) => number - 10)
-    else setPageNumber(0)
   }
 
   if (isLoading) {
@@ -137,9 +127,6 @@ const Films = () => {
           filmTitle={filmTitle}
           category={category}
           rating={rating}
-          pageNumber={pageNumber}
-          paginationNextHandler={paginationNextHandler}
-          paginationPrevHandler={paginationPrevHandler}
         />
       </div>
     </div>

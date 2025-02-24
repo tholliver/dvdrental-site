@@ -2,6 +2,15 @@ import { useState } from 'react'
 import { useCustomers } from '@/hooks/use-customers'
 import { Input } from '@/components/ui/input'
 import { useDebounce } from '@/hooks/use-debunce'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination'
 import ShadowTable from '@/components/CustomSkeletons/ShadowTable'
 import Head from 'next/head'
 import Paginator from '@/components/Paginator'
@@ -9,7 +18,7 @@ import Paginator from '@/components/Paginator'
 export default function CustomerList() {
   const [searchTerm, setSearchTerm] = useState('')
   const [page, setPage] = useState(1)
-  const [debouncedSearch, setDebouncedTerm] = useDebounce('', 300)
+  const [debouncedSearch, setDebouncedTerm] = useDebounce('', 500)
   const pageSize = 10
 
   const { customers, metadata, isLoading } = useCustomers(
@@ -17,6 +26,53 @@ export default function CustomerList() {
     page,
     pageSize
   )
+
+  const totalPages = metadata?.totalPages ?? 1
+
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pageNumbers: (number | 'ellipsis')[] = []
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1)
+    }
+
+    // Always show first page
+    pageNumbers.push(1)
+
+    // Calculate start and end of page numbers around current page
+    let start = Math.max(2, page - 2)
+    let end = Math.min(totalPages - 1, page + 2)
+
+    // Adjust if we're near the start
+    if (page <= 4) {
+      end = 5
+    }
+
+    // Adjust if we're near the end
+    if (page >= totalPages - 3) {
+      start = totalPages - 4
+    }
+
+    // Add ellipsis if needed
+    if (start > 2) {
+      pageNumbers.push('ellipsis')
+    }
+
+    // Add middle pages
+    for (let i = start; i <= end; i++) {
+      pageNumbers.push(i)
+    }
+
+    // Add ellipsis if needed
+    if (end < totalPages - 1) {
+      pageNumbers.push('ellipsis')
+    }
+
+    // Always show last page
+    pageNumbers.push(totalPages)
+
+    return pageNumbers
+  }
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -114,19 +170,58 @@ export default function CustomerList() {
             </tbody>
           </table>
         </div>
+        {metadata && metadata.totalPages > 1 && (
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                  className={
+                    page <= 1
+                      ? 'pointer-events-none opacity-50'
+                      : 'cursor-pointer'
+                  }
+                />
+              </PaginationItem>
 
-        <div className="mt-4">
-          {metadata && metadata.totalPages > 1 && (
-            <Paginator
-              page={page}
-              total={metadata?.total}
-              currentPage={metadata?.currentPage}
-              pageSize={metadata?.pageSize}
-              setPage={setPage}
-              totalPages={metadata?.totalPages}
-            />
-          )}
-        </div>
+              {getPageNumbers().map((pageNumber, index) => (
+                <PaginationItem key={index}>
+                  {pageNumber === 'ellipsis' ? (
+                    <PaginationEllipsis />
+                  ) : (
+                    <PaginationLink
+                      onClick={() => setPage(pageNumber)}
+                      isActive={page === pageNumber}
+                      className="cursor-pointer"
+                    >
+                      {pageNumber}
+                    </PaginationLink>
+                  )}
+                </PaginationItem>
+              ))}
+
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() =>
+                    setPage((prev) => Math.min(totalPages, prev + 1))
+                  }
+                  className={
+                    page >= totalPages
+                      ? 'pointer-events-none opacity-50'
+                      : 'cursor-pointer'
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
+
+        {metadata && (
+          <div className="py-5 text-sm text-muted-foreground text-center">
+            Showing page {metadata.currentPage} of {metadata.totalPages} (
+            {metadata.total} total results)
+          </div>
+        )}
       </div>
     </div>
   )

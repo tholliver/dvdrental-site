@@ -1,10 +1,10 @@
 import useSWR from "swr"
 import type { PaginatedResponse } from "@/types/customer"
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
+import { SelectCustomer } from "@/server/db/schemas"
+import { fetcher } from "@/services/fetcher"
 
 export function useCustomers(searchTerm = "", page = 1, pageSize = 10) {
-    const { data, error, isLoading, mutate, isValidating } = useSWR<PaginatedResponse>(
+    const { data, error, isLoading, mutate, isValidating } = useSWR<PaginatedResponse<SelectCustomer, "customers">>(
         `/api/customers/search?searchTerm=${searchTerm}&page=${page}&pageSize=${pageSize}`,
         fetcher,
         {

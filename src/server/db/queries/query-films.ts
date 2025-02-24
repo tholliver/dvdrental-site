@@ -1,7 +1,16 @@
 import { db } from "@/server/db";
 import { categorySchema, film_category, filmSchema } from "@/server/db/schemas";
-import { getTableColumns, ilike, eq, and, SQL } from "drizzle-orm";
+import { getTableColumns, ilike, eq, and, SQL, sql } from "drizzle-orm";
 import { FilmRating } from "@/server/types";
+
+const countSearchFilms = (filters: SQL[]) => {
+    return db
+        .select({ count: sql<number>`count(*)` })
+        .from(categorySchema)
+        .innerJoin(film_category, eq(categorySchema.category_id, film_category.category_id))
+        .innerJoin(filmSchema, eq(film_category.film_id, filmSchema.film_id))
+        .where(and(...filters)).prepare("count_filtered_films");
+};
 
 const searchFilms = (filters: SQL[], limit: number, offset: number) => {
     return db
@@ -9,16 +18,20 @@ const searchFilms = (filters: SQL[], limit: number, offset: number) => {
         .from(categorySchema)
         .innerJoin(film_category, eq(categorySchema.category_id, film_category.category_id))
         .innerJoin(filmSchema, eq(film_category.film_id, filmSchema.film_id))
-        .where(and(...filters)).limit(limit).offset(offset);
+        .where(and(...filters)).limit(limit).offset(offset).prepare("filtered_films");
 };
 
 export const QueryFilms = {
-    search: async function ({ title, category, rating, offset }: {
+    Search: async function ({ title, category, rating, page, pageSize }: {
         title?: string;
         category?: string;
         rating?: string;
-        offset: number;
+        page: number;
+        pageSize: number
     }) {
+
+        const offset = (page - 1) * pageSize
+
         const filters: SQL[] = [];
         if (category) {
             filters.push(eq(categorySchema.name, category));
@@ -29,7 +42,22 @@ export const QueryFilms = {
         if (rating) {
             filters.push(eq(filmSchema.rating, rating as FilmRating));
         }
-        return searchFilms(filters, 10, offset);
+        const totalCount = await countSearchFilms(filters).execute()
+        const films = await searchFilms(filters, pageSize, offset).execute();
+
+        const total = totalCount[0].count
+        const totalPages = Math.ceil(total / pageSize)
+
+        return {
+            films,
+            metadata: {
+                total,
+                totalPages,
+                currentPage: page,
+                pageSize
+            }
+        }
+
     },
     getAll: async (offset: number) =>
         await db.select().from(filmSchema).limit(10).offset(offset),

@@ -1,10 +1,11 @@
 import { QueryCustomers } from "@/server/db/queries/query-customers"
 import type { NextApiRequest, NextApiResponse } from "next"
-import type { PaginatedResponse } from "@/types/customer"
+import type { CustomerPaginatedResponse } from "@/types/customer"
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<PaginatedResponse | { message: string }>,
+    res: NextApiResponse<CustomerPaginatedResponse | { message: string }>
+
 ) {
     try {
         const page = Number(req.query.page) || 1

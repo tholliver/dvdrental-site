@@ -1,36 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import useSWR from 'swr'
 import Link from 'next/link'
-import { SearchIcon } from '../SVG'
-import { API_URI } from '@/config'
 import { IFilm } from '@/types'
 import { fetcher } from '@/services/fetcher'
-import { PrevResults, NextResults } from '../SVG'
-import TableSkeleton from '../CustomSkeletons/ShadowTable'
 import HeadlessTable from '../CustomSkeletons/HeadlessTable'
+import Paginator from '../Paginator'
+import { useFilms } from '@/hooks/use-films'
 
 interface FilmTableProps {
   filmTitle: string
   category: string
   rating: string
-  pageNumber: number
-  paginationPrevHandler: () => void
-  paginationNextHandler: () => void
 }
 
 const FilmCustomTable = (props: FilmTableProps) => {
-  const {
-    data: films,
-    isLoading,
-    error,
-  } = useSWR<IFilm[]>(
-    [
-      `/api/films/search?category=${props.category}&title=${props.filmTitle}&rating=${props.rating}&offset=${props.pageNumber}`,
-    ],
-    fetcher
+  const [page, setPage] = useState(1)
+  const pageSize = 10
+  const { films, metadata, isLoading, isValidating, error } = useFilms(
+    props.filmTitle,
+    page,
+    pageSize
   )
+  // const {
+  //   data: films,
+  //   error,
+  //   isValidating,
+  // } = useSWR<IFilm[]>(
+  //   [
+  //     `/api/films/search?category=${props.category}&title=${props.filmTitle}&rating=${props.rating}`,
+  //   ],
+  //   fetcher
+  // )
 
-  if (isLoading) {
+  if (isValidating) {
     return <HeadlessTable heightRow="8" rows={12} />
   }
 
@@ -63,7 +65,7 @@ const FilmCustomTable = (props: FilmTableProps) => {
             </tr>
           </thead>
           <tbody className="bg-gray-900">
-            {films?.map((film: IFilm, i: number) => (
+            {films?.map((film, i: number) => (
               <tr
                 key={film.film_id}
                 className="border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
@@ -91,38 +93,18 @@ const FilmCustomTable = (props: FilmTableProps) => {
           </tbody>
         </table>
       </div>
-      <div className="flex flex-col items-center pb-4">
-        <span className="text-sm text-gray-700 dark:text-gray-400">
-          Showing{' '}
-          <span className="font-semibold text-gray-900 dark:text-white">
-            {props.pageNumber + 1}
-          </span>{' '}
-          to{' '}
-          <span className="font-semibold text-gray-900 dark:text-white">
-            {props.pageNumber + 10}
-          </span>{' '}
-          of{' '}
-          <span className="font-semibold text-gray-900 dark:text-white">
-            100
-          </span>{' '}
-          Films
-        </span>
-        <div className="inline-flex mt-2 xs:mt-0">
-          <button
-            onClick={props.paginationPrevHandler}
-            className="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            <PrevResults />
-            Prev
-          </button>
-          <button
-            onClick={props.paginationNextHandler}
-            className="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-          >
-            Next
-            <NextResults />
-          </button>
-        </div>
+      <div className="mt-4 flex flex-col items-center">
+        {/* <Paginator /> */}
+        {metadata && metadata.totalPages > 1 && (
+          <Paginator
+            page={page}
+            total={metadata?.total}
+            currentPage={metadata?.currentPage}
+            pageSize={metadata?.pageSize}
+            setPage={setPage}
+            totalPages={metadata?.totalPages}
+          />
+        )}
       </div>
     </div>
   )

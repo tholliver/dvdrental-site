@@ -7,110 +7,122 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
+import type { Dispatch, SetStateAction } from 'react'
 
 interface PaginatorProps {
-  currentPage: number
+  page: number
+  total: number
   totalPages: number
-  onPageChange: (page: number) => void
+  currentPage: number
+  pageSize: number
+  setPage: Dispatch<SetStateAction<number>>
 }
 
 export default function Paginator({
+  page,
+  total,
+  totalPages = 1,
   currentPage,
-  totalPages,
-  onPageChange,
+  pageSize,
+  setPage,
 }: PaginatorProps) {
   // Generate array of page numbers to display
+  // Generate page numbers to display
   const getPageNumbers = () => {
-    const pages = []
-    if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i)
-      }
-    } else {
-      if (currentPage <= 3) {
-        for (let i = 1; i <= 4; i++) {
-          pages.push(i)
-        }
-      } else if (currentPage >= totalPages - 2) {
-        for (let i = totalPages - 3; i <= totalPages; i++) {
-          pages.push(i)
-        }
-      } else {
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-          pages.push(i)
-        }
-      }
+    const pageNumbers: (number | 'ellipsis')[] = []
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1)
     }
-    return pages
+
+    // Always show first page
+    pageNumbers.push(1)
+
+    // Calculate start and end of page numbers around current page
+    let start = Math.max(2, page - 2)
+    let end = Math.min(totalPages - 1, page + 2)
+
+    // Adjust if we're near the start
+    if (page <= 4) {
+      end = 5
+    }
+
+    // Adjust if we're near the end
+    if (page >= totalPages - 3) {
+      start = totalPages - 4
+    }
+
+    // Add ellipsis if needed
+    if (start > 2) {
+      pageNumbers.push('ellipsis')
+    }
+
+    // Add middle pages
+    for (let i = start; i <= end; i++) {
+      pageNumbers.push(i)
+    }
+
+    // Add ellipsis if needed
+    if (end < totalPages - 1) {
+      pageNumbers.push('ellipsis')
+    }
+
+    // Always show last page
+    pageNumbers.push(totalPages)
+
+    return pageNumbers
   }
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <p className="text-sm text-muted-foreground">
-        Page {currentPage} of {totalPages}
-      </p>
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              onClick={() => onPageChange(currentPage - 1)}
-              className={
-                currentPage === 1
-                  ? 'pointer-events-none opacity-50'
-                  : 'cursor-pointer'
-              }
-            />
-          </PaginationItem>
-
-          {currentPage > 3 && (
-            <>
-              <PaginationItem>
-                <PaginationLink onClick={() => onPageChange(1)}>
-                  1
-                </PaginationLink>
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationEllipsis />
-              </PaginationItem>
-            </>
-          )}
-
-          {getPageNumbers().map((page) => (
-            <PaginationItem key={page}>
-              <PaginationLink
-                isActive={currentPage === page}
-                onClick={() => onPageChange(page)}
-              >
-                {page}
-              </PaginationLink>
+      {totalPages > 1 && (
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                className={
+                  page <= 1
+                    ? 'pointer-events-none opacity-50'
+                    : 'cursor-pointer'
+                }
+              />
             </PaginationItem>
-          ))}
 
-          {currentPage < totalPages - 2 && (
-            <>
-              <PaginationItem>
-                <PaginationEllipsis />
+            {getPageNumbers().map((pageNumber, index) => (
+              <PaginationItem key={index}>
+                {pageNumber === 'ellipsis' ? (
+                  <PaginationEllipsis />
+                ) : (
+                  <PaginationLink
+                    onClick={() => setPage(pageNumber)}
+                    isActive={page === pageNumber}
+                    className="cursor-pointer"
+                  >
+                    {pageNumber}
+                  </PaginationLink>
+                )}
               </PaginationItem>
-              <PaginationItem>
-                <PaginationLink onClick={() => onPageChange(totalPages)}>
-                  {totalPages}
-                </PaginationLink>
-              </PaginationItem>
-            </>
-          )}
+            ))}
 
-          <PaginationItem>
-            <PaginationNext
-              onClick={() => onPageChange(currentPage + 1)}
-              className={
-                currentPage === totalPages
-                  ? 'pointer-events-none opacity-50'
-                  : 'cursor-pointer'
-              }
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+            <PaginationItem>
+              <PaginationNext
+                onClick={() =>
+                  setPage((prev) => Math.min(totalPages, prev + 1))
+                }
+                className={
+                  page >= totalPages
+                    ? 'pointer-events-none opacity-50'
+                    : 'cursor-pointer'
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
+
+      <div className="mb-5 text-sm text-muted-foreground text-center">
+        Showing page {currentPage} of {totalPages} ({total} total results)
+      </div>
     </div>
   )
 }
