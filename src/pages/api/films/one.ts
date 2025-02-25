@@ -1,10 +1,10 @@
 import { QueryFilms } from '@/server/db/queries/query-films';
-import { FilmInfoResponse } from '@/server/types/api-responses';
+import { FilmInfoAPIResponse } from '@/server/types/api-responses';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse<FilmInfoResponse | { message: string }>) {
+    res: NextApiResponse<FilmInfoAPIResponse | { message: string }>) {
 
     try {
         const { id } = req.query

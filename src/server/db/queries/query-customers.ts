@@ -161,5 +161,8 @@ export const QueryCustomers = {
             },
         }
     },
+    GetAll: function () {
+        return db.select().from(customerSchema)
+    }
 }
 

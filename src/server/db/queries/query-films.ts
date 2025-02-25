@@ -137,7 +137,8 @@ export const QueryFilms = {
             .offset(offset),
 
     GetById: async (filmId: number) => {
-        const [filmInfo] = await db.select().from(filmSchema).where(eq(filmSchema.film_id, filmId))
+        const { fulltext, ...rest } = getTableColumns(filmSchema); // exclude "content" column
+        const [filmInfo] = await db.select({ fulltext: sql<string>`${fulltext}`, ...rest }).from(filmSchema).where(eq(filmSchema.film_id, filmId))
         const [stats] = await db
             .select({
                 totalRentals: count(rentalSchema.rental_id).as('totalRentals'),
@@ -176,7 +177,7 @@ export const QueryFilms = {
         // Most active rental month
         const [mostActiveMonth] = await db
             .select({
-                month: sql`DATE_TRUNC('month', ${rentalSchema.rental_date})`.as('month'),
+                month: sql<Date>`DATE_TRUNC('month', ${rentalSchema.rental_date})`.as('month'),
                 rentalCount: count(rentalSchema.rental_id).as('rentalCount'),
             })
             .from(rentalSchema)

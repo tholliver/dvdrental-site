@@ -97,3 +97,37 @@ export type FilmInfoResponse = {
         rentalCount: number;
     };
 }
+
+export type FilmInfoAPIResponse = {
+    film_id: number;
+    title: string;
+    description: string;
+    release_year: number;
+    language_id: number;
+    rental_duration: number;
+    rental_rate: string;
+    length: number;
+    replacement_cost: string;
+    rating: 'G' | 'PG' | 'PG-13' | 'R' | 'NC-17'
+    last_update: Date;
+    special_features: string | null;
+    fulltext: string;
+    stats: {
+        totalRentals: number;
+        totalRevenue: string | null;
+        avgRentalRate: string | null;
+        firstRentalDate: Date | null;
+        lastRentalDate: Date | null;
+    };
+    topCustomers: {
+        customerId: number;
+        rentalCount: number;
+    }[];
+    filmCategories: {
+        categoryName: string | null;
+    }[];
+    mostActiveMonth: {
+        month: Date;
+        rentalCount: number;
+    };
+}
