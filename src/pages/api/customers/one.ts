@@ -8,6 +8,8 @@ export default async function handler(
 
     try {
         const { id } = req.query
+        console.log(typeof id);
+
         if (!id) {
             return res.status(400).json({ message: 'Error on getting unknown customer.' })
         } else {

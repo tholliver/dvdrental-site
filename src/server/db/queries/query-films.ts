@@ -1,6 +1,6 @@
 import { db } from "@/server/db";
-import { categorySchema, film_category, filmSchema } from "@/server/db/schemas";
-import { getTableColumns, ilike, eq, and, SQL, sql } from "drizzle-orm";
+import { categorySchema, film_category, filmSchema, inventorySchema, paymentSchema, rentalSchema } from "@/server/db/schemas";
+import { getTableColumns, ilike, eq, and, SQL, sql, avg, count, desc, max, min, sum } from "drizzle-orm";
 import { FilmRating } from "@/server/types";
 
 const countSearchFilms = (filters: SQL[]) => {
@@ -136,9 +136,62 @@ export const QueryFilms = {
             .limit(10)
             .offset(offset),
 
-    getById: async (filmId: number) =>
-        await db
-            .select()
-            .from(filmSchema)
-            .where(eq(filmSchema.film_id, filmId)),
+    GetById: async (filmId: number) => {
+        const [filmInfo] = await db.select().from(filmSchema).where(eq(filmSchema.film_id, filmId))
+        const [stats] = await db
+            .select({
+                totalRentals: count(rentalSchema.rental_id).as('totalRentals'),
+                totalRevenue: sum(paymentSchema.amount).as('totalRevenue'),
+                avgRentalRate: avg(paymentSchema.amount).as('avgRentalRate'),
+                firstRentalDate: min(rentalSchema.rental_date).as('firstRentalDate'),
+                lastRentalDate: max(rentalSchema.rental_date).as('lastRentalDate'),
+            })
+            .from(rentalSchema)
+            .leftJoin(inventorySchema, eq(rentalSchema.inventory_id, inventorySchema.inventory_id))
+            .leftJoin(paymentSchema, eq(rentalSchema.rental_id, paymentSchema.rental_id))
+            .where(eq(inventorySchema.film_id, filmId));
+
+        // Most frequent renters
+        const topCustomers = await db
+            .select({
+                customerId: rentalSchema.customer_id,
+                rentalCount: count(rentalSchema.rental_id).as('rentalCount'),
+            })
+            .from(rentalSchema)
+            .leftJoin(inventorySchema, eq(rentalSchema.inventory_id, inventorySchema.inventory_id))
+            .where(eq(inventorySchema.film_id, filmId))
+            .groupBy(rentalSchema.customer_id)
+            .orderBy(desc(count(rentalSchema.rental_id)))
+            .limit(5);
+
+        // Categories of the film
+        const filmCategories = await db
+            .select({
+                categoryName: categorySchema.name,
+            })
+            .from(film_category)
+            .leftJoin(categorySchema, eq(film_category.category_id, categorySchema.category_id))
+            .where(eq(film_category.film_id, filmId));
+
+        // Most active rental month
+        const [mostActiveMonth] = await db
+            .select({
+                month: sql`DATE_TRUNC('month', ${rentalSchema.rental_date})`.as('month'),
+                rentalCount: count(rentalSchema.rental_id).as('rentalCount'),
+            })
+            .from(rentalSchema)
+            .leftJoin(inventorySchema, eq(rentalSchema.inventory_id, inventorySchema.inventory_id))
+            .where(eq(inventorySchema.film_id, filmId))
+            .groupBy(sql`DATE_TRUNC('month', ${rentalSchema.rental_date})`)
+            .orderBy(desc(count(rentalSchema.rental_id)))
+            .limit(1);
+
+        return {
+            ...filmInfo,
+            stats,
+            topCustomers,
+            filmCategories,
+            mostActiveMonth,
+        };
+    }
 };
