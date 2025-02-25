@@ -24,25 +24,25 @@ export const storeSchema = pgTable('store', {
 export const customerSchema = pgTable('customer', {
     customer_id: serial('customer_id').primaryKey().notNull(),
     store_id: integer('store_id'),
-    first_name: varchar('first_name', { length: 50 }),
-    last_name: varchar('last_name', { length: 50 }),
-    email: varchar('email', { length: 100 }),
+    first_name: varchar('first_name', { length: 50 }).notNull(),
+    last_name: varchar('last_name', { length: 50 }).notNull(),
+    email: varchar('email', { length: 100 }).notNull(),
     address_id: integer('address_id'),
     activebool: boolean('activebool'),
     create_date: timestamp('create_date').defaultNow(),
     last_update: timestamp('last_update').defaultNow(),
-    active: boolean('active'),
+    active: boolean('active').notNull(),
 })
 
 export const staffSchema = pgTable('staff', {
     staff_id: serial('staff_id'),
-    nombre: varchar('nombre', { length: 50 }),
-    apellido: varchar('apellido', { length: 50 }),
+    first_name: varchar('first_name', { length: 50 }),
+    last_name: varchar('last_name', { length: 50 }),
     address_id: integer('address_id'),
     email: varchar('email', { length: 50 }),
     store_id: integer('store_id'),
-    activo: boolean('activo'),
-    usuario: varchar('usuario', { length: 50 }),
+    active: boolean('active'),
+    username: varchar('username', { length: 50 }),
     password: varchar('password', { length: 255 }), // Update the length as needed
     last_update: timestamp('last_update').defaultNow(),
 })
@@ -95,7 +95,7 @@ export const inventorySchema = pgTable('inventory', {
 
 export const rentalSchema = pgTable('rental', {
     rental_id: serial('rental_id').primaryKey().notNull(),
-    rental_date: timestamp('rental_date').notNull(),
+    rental_date: timestamp('rental_date', { mode: "date" }).notNull(),
     inventory_id: smallint('inventory_id').notNull(),
     customer_id: smallint('customer_id').notNull(),
     return_date: timestamp('return_date'),

@@ -36,7 +36,7 @@ type PaymentData = {
 const paymentChartConfig = {
   amount: {
     label: 'Amount:',
-    color: 'hsl(var(--chart-1))',
+    color: 'hsl(var(--chart-3))',
   },
 } satisfies ChartConfig
 
