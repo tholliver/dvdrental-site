@@ -76,7 +76,7 @@ export default function CustomerList() {
               {customers.map((customer) => (
                 <tr
                   key={customer.customer_id}
-                  className=" bg-gray-900 even:bg-gray-800 border-b border-gray-700 "
+                  className="bg-gray-900 even:bg-gray-800 border-b border-gray-700"
                 >
                   <th scope="row" className="px-6 py-4 font-medium text-white">
                     {customer.first_name} {customer.last_name}
@@ -105,11 +105,12 @@ export default function CustomerList() {
               ))}
 
               {customers.length === 0 && (
-                <div className="w-full h-15 flex flex-1 justify-center">
-                  <p className="text-center text-muted-foreground">
-                    No customers found
-                  </p>
-                </div>
+                <td
+                  colSpan={5}
+                  className="px-6 py-12 text-center text-muted-foreground"
+                >
+                  No customers found
+                </td>
               )}
             </tbody>
           </table>

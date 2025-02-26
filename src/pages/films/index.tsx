@@ -1,3 +1,4 @@
+import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
 import { useState } from 'react'
 import { fetcher } from '@/services/fetcher'
 import React from 'react'
@@ -9,32 +10,42 @@ import FilmCustomTable from '@/components/FilmCustomTable'
 import DropdownComponents from '@/components/Dropdowns'
 import TableSkeleton from '@/components/CustomSkeletons/ShadowTable'
 import { useDebounce } from '@/hooks/use-debunce'
+import { useRouter } from 'next/router'
+import { useFilmFilters } from '@/hooks/use-film-filters'
 
-const Films = () => {
-  const [filmTitle, setFilmTitle] = useState('')
-  const [selectedRating, setSelectedRating] = React.useState<string>()
-  const [selectedCategory, setSelectedCategory] = React.useState<string>()
-  const [debouncedSearch, setDebouncedTerm] = useDebounce('', 300)
+type QueryState = {
+  title: string | string[]
+  category: string | string[]
+  rating: string | string[]
+  // page: string
+}
 
+type PageProps = {
+  initialQueries: QueryState
+}
+
+// const updateQueryParam = <T extends string | undefined>(
+//   key: string,
+//   value: T,
+//   router: ReturnType<typeof useRouter>
+// ) => {
+//   router.push(
+//     {
+//       pathname: router.pathname,
+//       query: { ...router.query, [key]: value },
+//     },
+//     undefined,
+//     { shallow: true }
+//   )
+// }
+
+export default function Films({ initialQueries }: PageProps) {
+  const { filters, debouncedTitle, updateFilter } = useFilmFilters()
   const {
     data: categories,
     isLoading,
     error,
   } = useSWR<ICategoryOption[]>([`/api/categories`], fetcher)
-
-  const handleFilmSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault()
-    setFilmTitle(event.target.value)
-    setDebouncedTerm(event.target.value)
-  }
-
-  const handleCategoryChange = (value: string) => {
-    setSelectedCategory(value)
-  }
-
-  const handleRatingChange = (value: string) => {
-    setSelectedRating(value)
-  }
 
   if (isLoading) {
     return <TableSkeleton heightRow="8" rows={12} />
@@ -57,16 +68,16 @@ const Films = () => {
               {/* Category select */}
               <DropdownComponents.Dropdown
                 options={categories!}
-                value={selectedCategory}
-                onChange={handleCategoryChange}
+                value={filters.category}
+                onChange={(value) => updateFilter('category', value)}
                 placeholder="Select a category..."
               />
             </div>
             <div className="relative">
               <DropdownComponents.Dropdown
                 options={ratings}
-                value={selectedRating}
-                onChange={handleRatingChange}
+                value={filters.rating}
+                onChange={(value) => updateFilter('rating', value)}
                 placeholder="Select a rating..."
               />
             </div>
@@ -80,7 +91,8 @@ const Films = () => {
             </div>
             <input
               type="text"
-              onChange={handleFilmSearch}
+              value={filters.title}
+              onChange={(e) => updateFilter('title', e.target.value)}
               id="table-search-titles"
               className="focus:outline-none block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Search for titles"
@@ -88,13 +100,23 @@ const Films = () => {
           </div>
         </div>
         <FilmCustomTable
-          filmTitle={debouncedSearch}
-          category={selectedCategory!}
-          rating={selectedRating!}
+          filmTitle={debouncedTitle}
+          category={filters.category}
+          rating={filters.rating}
         />
       </div>
     </div>
   )
 }
 
-export default Films
+export const getServerSideProps = (async ({ query }) => {
+  return {
+    props: {
+      initialQueries: {
+        title: query.title || '',
+        category: query.category || '',
+        rating: query.rating || '',
+      },
+    },
+  }
+}) satisfies GetServerSideProps<PageProps>
