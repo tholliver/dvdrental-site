@@ -44,6 +44,11 @@ export type ResponseData = {
     payments: Payment[];
 };
 
+export type CategoryResponse = {
+    value: string | number
+    name: string
+}
+
 export type RentalResponseData = {
     rentals: Rental[];
 };

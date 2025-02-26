@@ -1,8 +1,5 @@
 import React, { useState } from 'react'
-import useSWR from 'swr'
 import Link from 'next/link'
-import { IFilm } from '@/types'
-import { fetcher } from '@/services/fetcher'
 import HeadlessTable from '../CustomSkeletons/HeadlessTable'
 import Paginator from '../Paginator'
 import { useFilms } from '@/hooks/use-films'
@@ -17,20 +14,12 @@ const FilmCustomTable = (props: FilmTableProps) => {
   const [page, setPage] = useState(1)
   const pageSize = 10
   const { films, metadata, isLoading, isValidating, error } = useFilms(
+    props.category,
+    props.rating,
     props.filmTitle,
     page,
     pageSize
   )
-  // const {
-  //   data: films,
-  //   error,
-  //   isValidating,
-  // } = useSWR<IFilm[]>(
-  //   [
-  //     `/api/films/search?category=${props.category}&title=${props.filmTitle}&rating=${props.rating}`,
-  //   ],
-  //   fetcher
-  // )
 
   if (isValidating) {
     return <HeadlessTable heightRow="8" rows={12} />

@@ -2,49 +2,46 @@ import { useState } from 'react'
 import { fetcher } from '@/services/fetcher'
 import React from 'react'
 import useSWR from 'swr'
-import { ICategory, ratings, FilmRating } from '@/types'
-import { ArrowDownIcon, SearchIcon } from '@/components/SVG'
+import { ICategoryOption, ratings } from '@/types'
+import { SearchIcon } from '@/components/SVG'
 import Head from 'next/head'
 import FilmCustomTable from '@/components/FilmCustomTable'
 import DropdownComponents from '@/components/Dropdowns'
-import { Skeleton } from '@/components/ui/skeleton'
 import TableSkeleton from '@/components/CustomSkeletons/ShadowTable'
+import { useDebounce } from '@/hooks/use-debunce'
 
 const Films = () => {
   const [filmTitle, setFilmTitle] = useState('')
-  const [category, setCategory] = useState('')
-  const [rating, setRating] = useState('')
-  const [pageNumber, setPageNumber] = useState(0)
-  const [categoryIsOpen, setCategoryOpen] = useState(false)
-  const [ratingIsOpen, setRatingOpen] = useState(false)
+  const [selectedRating, setSelectedRating] = React.useState<string>()
+  const [selectedCategory, setSelectedCategory] = React.useState<string>()
+  const [debouncedSearch, setDebouncedTerm] = useDebounce('', 300)
 
   const {
     data: categories,
     isLoading,
     error,
-  } = useSWR<ICategory[]>([`/api/categories`], fetcher)
+  } = useSWR<ICategoryOption[]>([`/api/categories`], fetcher)
 
   const handleFilmSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
     setFilmTitle(event.target.value)
+    setDebouncedTerm(event.target.value)
   }
 
-  const handleCategoryFilter = (paramCategory: string) => {
-    setCategory(paramCategory)
-    setPageNumber(0)
-    setCategoryOpen(!categoryIsOpen)
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value)
   }
 
-  const handleRatingFilter = (paramRating: string) => {
-    setRating(paramRating)
-    setPageNumber(0)
-    setRatingOpen(!ratingIsOpen)
+  const handleRatingChange = (value: string) => {
+    setSelectedRating(value)
   }
 
   if (isLoading) {
     return <TableSkeleton heightRow="8" rows={12} />
   }
-
+  if (error) {
+    return <div>Error huge one</div>
+  }
   return (
     <div className="flex flex-1 justify-center">
       <Head>
@@ -57,54 +54,21 @@ const Films = () => {
         <div className="flex items-center rounded-t-lg justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 dark:bg-gray-900">
           <div className="flex space-x-4">
             <div className="relative">
-              <button
-                id="dropdownActionButton"
-                data-dropdown-toggle="dropdownAction"
-                onClick={() => setCategoryOpen(!categoryIsOpen)}
-                className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                type="button"
-              >
-                <span className="sr-only">Category button</span>
-                Categories
-                <ArrowDownIcon />
-              </button>
               {/* Category select */}
-              <div
-                id="dropdownAction"
-                className={`absolute ${
-                  categoryIsOpen ? '' : 'hidden'
-                }  bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 z-30`}
-              >
-                <DropdownComponents.Dropdown
-                  items={categories ?? []}
-                  handleFilter={handleCategoryFilter}
-                />
-              </div>
+              <DropdownComponents.Dropdown
+                options={categories!}
+                value={selectedCategory}
+                onChange={handleCategoryChange}
+                placeholder="Select a category..."
+              />
             </div>
             <div className="relative">
-              <button
-                id="dropdownActionButton"
-                data-dropdown-toggle="dropdownAction"
-                onClick={() => setRatingOpen(!ratingIsOpen)}
-                className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                type="button"
-              >
-                <span className="sr-only">Category button</span>
-                Rating
-                <ArrowDownIcon />
-              </button>
-              {/* Category select */}
-              <div
-                id="dropdownAction"
-                className={`absolute ${
-                  ratingIsOpen ? '' : 'hidden'
-                }  bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 z-30`}
-              >
-                <DropdownComponents.Dropdown
-                  items={ratings ?? []}
-                  handleFilter={handleRatingFilter}
-                />
-              </div>
+              <DropdownComponents.Dropdown
+                options={ratings}
+                value={selectedRating}
+                onChange={handleRatingChange}
+                placeholder="Select a rating..."
+              />
             </div>
           </div>
           <label htmlFor="table-search" className="sr-only">
@@ -124,9 +88,9 @@ const Films = () => {
           </div>
         </div>
         <FilmCustomTable
-          filmTitle={filmTitle}
-          category={category}
-          rating={rating}
+          filmTitle={debouncedSearch}
+          category={selectedCategory!}
+          rating={selectedRating!}
         />
       </div>
     </div>

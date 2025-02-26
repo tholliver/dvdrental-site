@@ -105,11 +105,14 @@ export interface IFilm {
 }
 
 export interface ICategory {
-  category_id: string,
-  name: string,
+  category_id: string
+  name: string
   updated_at: Date
 }
-
+export interface ICategoryOption {
+  value: string
+  name: string
+}
 export enum FilmRating {
   G = 'G',
   PG = 'PG',

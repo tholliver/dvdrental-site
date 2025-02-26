@@ -1,13 +1,12 @@
 import { QueryCategories } from '@/server/db/queries/query-categories';
-import { QueryPayments } from '@/server/db/queries/query-payments'
 import { SelectCategory } from '@/server/db/schemas/index';
-import type { Payment, ResponseData } from '@/server/types'
+import type { CategoryResponse } from '@/server/types'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 
 export default async function handler(
     _: NextApiRequest,
-    res: NextApiResponse<SelectCategory[] | { message: 'Error getting categories data on API.' }>) {
+    res: NextApiResponse<CategoryResponse[] | { message: string }>) {
 
     try {
         const categories = await QueryCategories.GetAll()

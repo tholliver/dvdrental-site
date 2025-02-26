@@ -1,5 +1,4 @@
 import React from 'react'
-import { ClockIcon, ArrowDownIcon } from '../SVG'
 import { TimeLapseSelect, timeOptions } from '@/types'
 import {
   DropdownMenu,
@@ -11,6 +10,17 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Button } from '../ui/button'
+import { cn } from '@/lib/utils'
+import {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+} from '@/components/ui/command'
+import { ChevronDown, Check } from 'lucide-react'
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 
 interface DropdownStyledProps {
   topRentalTimeLapse: TimeLapseSelect
@@ -61,33 +71,81 @@ const DropdownStyled = (props: DropdownStyledProps) => {
   )
 }
 
-// export default DropdownStyled
-
-type DropdownProps<T> = {
-  items: T[] | undefined | null
-  handleFilter: (name: string) => void
+// export default Dropdown
+export interface DropdownOption {
+  name: string
+  value: string
 }
 
-const Dropdown = <T extends { name: string }>(props: DropdownProps<T>) => {
+interface DropdownProps {
+  options: DropdownOption[]
+  value?: string
+  onChange?: (value: string) => void
+  placeholder?: string
+  searchPlaceholder?: string
+  emptyMessage?: string
+  className?: string
+}
+
+function Dropdown({
+  options,
+  value,
+  onChange,
+  placeholder = 'Select an option...',
+  searchPlaceholder = 'Search options...',
+  emptyMessage = 'No options found.',
+  className,
+}: DropdownProps) {
+  const [open, setOpen] = React.useState(false)
+
+  // Find the currently selected option
+  const selectedOption = React.useMemo(
+    () => options.find((option) => option.value === value),
+    [options, value]
+  )
+
   return (
-    <div>
-      <ul
-        className="py-1 text-sm text-gray-700 dark:text-gray-200"
-        aria-labelledby="dropdownActionButton"
-      >
-        {props.items?.map((item, i: number) => (
-          <li key={i}>
-            <a
-              onClick={() => props.handleFilter(item.name)}
-              href="#"
-              className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-            >
-              {item.name}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className={cn('w-full justify-between', className)}
+        >
+          {selectedOption ? selectedOption.name : placeholder}
+          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-full p-0">
+        <Command>
+          <CommandInput placeholder={searchPlaceholder} />
+          <CommandList>
+            <CommandEmpty>{emptyMessage}</CommandEmpty>
+            <CommandGroup>
+              {options.map((option) => (
+                <CommandItem
+                  key={option.value}
+                  value={option.value}
+                  onSelect={(currentValue) => {
+                    onChange?.(currentValue)
+                    setOpen(false)
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      'mr-2 h-4 w-4',
+                      value === option.value ? 'opacity-100' : 'opacity-0'
+                    )}
+                  />
+                  {option.name}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   )
 }
 

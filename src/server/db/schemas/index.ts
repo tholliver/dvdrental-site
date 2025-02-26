@@ -64,7 +64,7 @@ const tsVector = customType({
 
 export const categorySchema = pgTable('category', {
     category_id: serial('category_id').primaryKey(),
-    name: varchar('name', { length: 25 }),
+    name: varchar('name', { length: 25 }).notNull(),
     last_update: timestamp('last_update').notNull().defaultNow(),
 })
 
