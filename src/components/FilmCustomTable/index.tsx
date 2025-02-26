@@ -3,6 +3,7 @@ import Link from 'next/link'
 import HeadlessTable from '../CustomSkeletons/HeadlessTable'
 import Paginator from '../Paginator'
 import { useFilms } from '@/hooks/use-films'
+import { ErrorUI } from '../ErrorUI'
 
 interface FilmTableProps {
   filmTitle: string
@@ -25,7 +26,7 @@ const FilmCustomTable = (props: FilmTableProps) => {
     return <HeadlessTable heightRow="8" rows={12} />
   }
 
-  if (error) return <div>Something happened</div>
+  if (error) return <ErrorUI />
 
   return (
     <div id="film-table">

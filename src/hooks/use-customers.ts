@@ -17,6 +17,7 @@ export function useCustomers(searchTerm = "", page = 1, pageSize = 10) {
         customers: data?.customers ?? [],
         metadata: data?.metadata,
         isLoading,
+        isValidating,
         error,
         mutate,
     }
