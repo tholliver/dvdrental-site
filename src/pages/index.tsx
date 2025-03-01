@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Home</title>
+        <title>DVD Rental</title>
         <meta property="og:title" content="Home" key="title" />
       </Head>
       <section className="bg-gradient-to-r from-primary to-secondary text-primary-foreground py-20">
@@ -25,7 +25,7 @@ export default function Home() {
             blockbusters
           </p>
           <Link
-            href="#"
+            href="/dashboard"
             className="bg-accent hover:bg-accent/90 text-accent-foreground px-6 py-3 rounded-full text-lg font-semibold inline-flex items-center"
           >
             Start Browsing <ArrowRight className="ml-2" />
@@ -79,14 +79,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="signin-section" className="py-16 bg-background">
+      {/* <section id="signin-section" className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <h3 className="text-3xl font-bold mb-8 text-center">
             Join Our Community of Film Fans
           </h3>
           <AuthForm />
         </div>
-      </section>
+      </section> */}
     </div>
   )
 }

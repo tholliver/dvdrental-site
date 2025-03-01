@@ -54,7 +54,7 @@ export default function Films({ initialQueries }: PageProps) {
     return <div>Error huge one</div>
   }
   return (
-    <div className="flex flex-1 justify-center">
+    <div className="px-8 flex flex-1 justify-center">
       <Head>
         <title>Films</title>
         <meta property="og:title" content="Films" key="title" />

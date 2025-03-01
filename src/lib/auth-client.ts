@@ -9,19 +9,24 @@ export const { signIn, signOut, signUp, useSession, ...authClient } = createAuth
 
 export function getNavLinks(role: string) {
     const links = [
-        { href: "/films", label: "Catalog" },
+        { href: "/films", label: "Films" },
     ]
 
-    if (role === "customer" || role === "admin") {
-        links.push(...[{ href: "/customers", label: "Customers" },
-        { href: "/dashboard", label: "Dashboard" }
-        ])
-    }
+    // if (role === "customer") {
+    //     links.push(...[{ href: "/customers", label: "Customers" },
+    //     { href: "/dashboard", label: "Dashboard" }
+    //     ])
+    // }
 
-    if (role === "admin") {
-        links.push({ href: "/admin", label: "Admin Panel" })
-    }
+    // if (role === "admin") {
+    //     links.push(...[{ href: "/customers", label: "Customers" },
+    //     { href: "/dashboard", label: "Dashboard" }
+    //     ])
+    // }
 
+    links.push(...[{ href: "/customers", label: "Customers" },
+    { href: "/dashboard", label: "Dashboard" }
+    ])
     return links
 }
 

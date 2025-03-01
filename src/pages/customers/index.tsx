@@ -31,10 +31,14 @@ export default function CustomerList() {
 
   return (
     <div className="flex flex-1 justify-center">
+      <Head>
+        <title>Customers</title>
+      </Head>
       <div className="container">
-        <Head>
-          <title>Customers</title>
-        </Head>
+        <h3 className="pt-4 text-3xl font-bold dark:text-white">
+          Customers List
+        </h3>
+
         <div className="container sticky top-0 bg-background py-4">
           <Input
             placeholder="Search customers..."
