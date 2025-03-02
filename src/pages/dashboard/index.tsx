@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { QueryStats } from '@/server/db/queries/query-stats'
 import DialCharts from '@/components/CustomCharts/DialCharts'
 import TopFilmsTable from '@/components/FilmTable'
+import Head from 'next/head'
 
 type AllStats = {
   totalRents: number
@@ -45,6 +46,9 @@ export default function DashboardPage({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <div className="flex flex-1 justify-center">
+      <Head>
+        <title>Dashboard - DVD Rental</title>
+      </Head>
       <div className="container min-h-screen">
         {/* <header className="border-b border-slate-800">
           <div className=" flex h-16 items-center px-4">

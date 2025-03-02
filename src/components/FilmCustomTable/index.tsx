@@ -31,8 +31,8 @@ const FilmCustomTable = (props: FilmTableProps) => {
   return (
     <div id="film-table">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-gray-900">
-        <table className="w-full text-sm text-left rtl:text-right">
-          <thead className="text-xs text-slate-200 uppercase dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-400">
+          <thead className="text-xs uppercase bg-gray-700 text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Film title
@@ -54,11 +54,11 @@ const FilmCustomTable = (props: FilmTableProps) => {
               </th>
             </tr>
           </thead>
-          <tbody className="bg-gray-900">
+          <tbody className="">
             {films?.map((film, i: number) => (
               <tr
                 key={film.film_id}
-                className="border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
+                className="border-b dark:bg-gray-800 border-gray-700 hover:bg-gray-600"
               >
                 <th
                   scope="row"

@@ -12,6 +12,7 @@ import TableSkeleton from '@/components/CustomSkeletons/ShadowTable'
 import { useDebounce } from '@/hooks/use-debunce'
 import { useRouter } from 'next/router'
 import { useFilmFilters } from '@/hooks/use-film-filters'
+import { ErrorUI } from '@/components/ErrorUI'
 
 type QueryState = {
   title: string | string[]
@@ -51,7 +52,7 @@ export default function Films({ initialQueries }: PageProps) {
     return <TableSkeleton heightRow="8" rows={12} />
   }
   if (error) {
-    return <div>Error huge one</div>
+    return <ErrorUI />
   }
   return (
     <div className="px-8 flex flex-1 justify-center">
