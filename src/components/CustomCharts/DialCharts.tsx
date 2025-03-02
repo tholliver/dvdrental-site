@@ -24,6 +24,7 @@ import { fetcher } from '@/services/fetcher'
 import { useState } from 'react'
 import { Payment, Rental } from '@/server/types'
 import { Skeleton } from '../ui/skeleton'
+import { ErrorUI } from '../ErrorUI'
 
 type RentalData = {
   rentals: Array<Rental>
@@ -66,6 +67,10 @@ export default function DialCharts() {
         <Skeleton className="rounded-xl rounded-b-none h-[300px] w-full" />
       </div>
     )
+  }
+
+  if (rentalFetchError) {
+    return <ErrorUI />
   }
 
   return (

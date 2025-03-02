@@ -16,6 +16,7 @@ import DropdownComponents from '../Dropdowns'
 import { Button } from '../ui/button'
 import { Card } from '../ui/card'
 import { Skeleton } from '../ui/skeleton'
+import { ErrorUI } from '../ErrorUI'
 
 export default function TopFilmsTable() {
   const [topRentalTimeLapse, setTopRentalTimeLapse] = useState<TimeLapseSelect>(
@@ -49,7 +50,7 @@ export default function TopFilmsTable() {
     )
   }
   if (error) {
-    return <div>Error</div>
+    return <ErrorUI />
   }
 
   return (
