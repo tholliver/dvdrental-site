@@ -11,7 +11,7 @@ export interface FilterState {
 
 export function useFilmFilters() {
     const router = useRouter()
-    // Get current values directly from router.query
+
     const currentFilters = {
         title: (router.query.title as string) || "",
         category: (router.query.category as string) || "",
@@ -23,8 +23,7 @@ export function useFilmFilters() {
     // Debounce the current title from URL
     const debouncedTitle = useDebouncedValue(currentFilters.title, 300)
 
-    const updateFilter = (key: keyof FilterState, value: string | number) => {
-        // Update URL with new value
+    const updateFilter = <T extends string | number>(key: string, value: T) => {
         const newQuery = {
             ...router.query,
             page: 1,
@@ -41,19 +40,6 @@ export function useFilmFilters() {
         );
     }
 
-    // function updateURLParams(key: keyof FilterState, value: string | number) {
-    //     router.push(
-    //         {
-    //             pathname: router.pathname,
-    //             query: {
-    //                 ...router.query,
-    //                 [key]: value || undefined, // Remove empty values from URL
-    //             },
-    //         },
-    //         undefined,
-    //         { shallow: true },
-    //     )
-    // }
 
     return {
         filters: currentFilters,

@@ -16,7 +16,7 @@ interface PaginatorProps {
   totalPages: number
   currentPage: number
   pageSize: number
-  updatePage: (key: keyof FilterState, value: number) => void
+  updatePage: <T extends string | number>(key: string, value: T) => void
 }
 
 export default function Paginator({

@@ -8,22 +8,15 @@ import CustomersTable from '@/components/customers-table'
 import Paginator from '@/components/Paginator'
 
 export default function CustomerList() {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [page, setPage] = useState(1)
-  const [debouncedSearch, setDebouncedTerm] = useDebounce('', 300)
-  const pageSize = 10
-
-  const { customers, metadata, isLoading, isValidating } = useCustomers(
-    debouncedSearch,
-    page,
-    pageSize
-  )
-
-  const handleSearch = (value: string) => {
-    setSearchTerm(value)
-    setDebouncedTerm(value)
-    setPage(1)
-  }
+  const {
+    filters,
+    updateFilter,
+    customers,
+    metadata,
+    isLoading,
+    isValidating,
+    currentPage,
+  } = useCustomers()
 
   if (isLoading) {
     return <ShadowTable rows={10} heightRow="8" />
@@ -42,8 +35,8 @@ export default function CustomerList() {
         <div className="container sticky top-0 bg-background py-4">
           <Input
             placeholder="Search customers..."
-            value={searchTerm}
-            onChange={(e) => handleSearch(e.target.value)}
+            value={filters.searchTerm}
+            onChange={(e) => updateFilter('searchTerm', e.target.value)}
             className="max-w-sm"
           />
         </div>
@@ -65,6 +58,18 @@ export default function CustomerList() {
                 />
               )}
             </div> */}
+            <div>
+              {metadata && metadata.totalPages > 1 && (
+                <Paginator
+                  page={currentPage}
+                  total={metadata?.total}
+                  currentPage={metadata?.currentPage}
+                  pageSize={metadata?.pageSize}
+                  updatePage={updateFilter}
+                  totalPages={metadata?.totalPages}
+                />
+              )}
+            </div>
           </div>
         )}
       </div>
