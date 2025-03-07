@@ -7,7 +7,6 @@ export function useFilms(category = "", rating = "", searchTerm = "", page = 1, 
     const { data, error, isLoading, mutate, isValidating } = useSWR<PaginatedResponse<SelectFilm, "films">>(
         `/api/films/search?category=${category}&title=${searchTerm}&rating=${rating}&page=${page}&pageSize=${pageSize}`,
 
-        // `/api/films/search?category=${searchTerm}&page=${page}&pageSize=${pageSize}`,
         fetcher,
         {
             keepPreviousData: true,

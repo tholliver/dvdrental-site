@@ -43,7 +43,6 @@ export default function UserMenu({ user }: UserMenuProps) {
             onClick={() => {
               // Implement logout logic here
               signOut()
-              console.log('Logging out...')
             }}
             className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-cyan-500"
           >

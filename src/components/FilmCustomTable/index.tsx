@@ -4,22 +4,25 @@ import HeadlessTable from '../CustomSkeletons/HeadlessTable'
 import Paginator from '../Paginator'
 import { useFilms } from '@/hooks/use-films'
 import { ErrorUI } from '../ErrorUI'
+import { useFilmFilters } from '@/hooks/use-film-filters'
 
 interface FilmTableProps {
   filmTitle: string
   category: string
   rating: string
+  page: number
+  pageSize: number
 }
 
 const FilmCustomTable = (props: FilmTableProps) => {
-  const [page, setPage] = useState(1)
-  const pageSize = 10
+  const { filters, updateFilter } = useFilmFilters()
+
   const { films, metadata, isLoading, isValidating, error } = useFilms(
     props.category,
     props.rating,
     props.filmTitle,
-    page,
-    pageSize
+    props.page,
+    props.pageSize
   )
 
   if (isValidating) {
@@ -85,13 +88,14 @@ const FilmCustomTable = (props: FilmTableProps) => {
       </div>
       <div className="mt-4 flex flex-col items-center">
         {/* <Paginator /> */}
+
         {metadata && metadata.totalPages > 1 && (
           <Paginator
-            page={page}
+            page={filters.page}
             total={metadata?.total}
             currentPage={metadata?.currentPage}
             pageSize={metadata?.pageSize}
-            setPage={setPage}
+            updatePage={updateFilter}
             totalPages={metadata?.totalPages}
           />
         )}

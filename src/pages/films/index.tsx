@@ -1,5 +1,4 @@
-import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
-import { useState } from 'react'
+import type { GetServerSideProps } from 'next'
 import { fetcher } from '@/services/fetcher'
 import React from 'react'
 import useSWR from 'swr'
@@ -9,8 +8,6 @@ import Head from 'next/head'
 import FilmCustomTable from '@/components/FilmCustomTable'
 import DropdownComponents from '@/components/Dropdowns'
 import TableSkeleton from '@/components/CustomSkeletons/ShadowTable'
-import { useDebounce } from '@/hooks/use-debunce'
-import { useRouter } from 'next/router'
 import { useFilmFilters } from '@/hooks/use-film-filters'
 import { ErrorUI } from '@/components/ErrorUI'
 
@@ -18,7 +15,7 @@ type QueryState = {
   title: string | string[]
   category: string | string[]
   rating: string | string[]
-  // page: string
+  pageSize: string | string[]
 }
 
 type PageProps = {
@@ -40,7 +37,7 @@ type PageProps = {
 //   )
 // }
 
-export default function Films({ initialQueries }: PageProps) {
+export default function Films() {
   const { filters, debouncedTitle, updateFilter } = useFilmFilters()
   const {
     data: categories,
@@ -75,6 +72,7 @@ export default function Films({ initialQueries }: PageProps) {
               />
             </div>
             <div className="relative">
+              {/* Category rating */}
               <DropdownComponents.Dropdown
                 options={ratings}
                 value={filters.rating}
@@ -104,6 +102,8 @@ export default function Films({ initialQueries }: PageProps) {
           filmTitle={debouncedTitle}
           category={filters.category}
           rating={filters.rating}
+          page={filters.page}
+          pageSize={filters.pageSize}
         />
       </div>
     </div>
@@ -117,6 +117,7 @@ export const getServerSideProps = (async ({ query }) => {
         title: query.title || '',
         category: query.category || '',
         rating: query.rating || '',
+        pageSize: query.pageSize || '',
       },
     },
   }

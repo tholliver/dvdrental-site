@@ -7,7 +7,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import type { Dispatch, SetStateAction } from 'react'
+import { FilterState } from '@/hooks/use-film-filters'
+// import { updateFilter } from '../hooks/use-film-filters'
 
 interface PaginatorProps {
   page: number
@@ -15,7 +16,7 @@ interface PaginatorProps {
   totalPages: number
   currentPage: number
   pageSize: number
-  setPage: Dispatch<SetStateAction<number>>
+  updatePage: (key: keyof FilterState, value: number) => void
 }
 
 export default function Paginator({
@@ -24,7 +25,7 @@ export default function Paginator({
   totalPages = 1,
   currentPage,
   pageSize,
-  setPage,
+  updatePage,
 }: PaginatorProps) {
   // Generate array of page numbers to display
   // Generate page numbers to display
@@ -79,7 +80,7 @@ export default function Paginator({
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
-                onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                onClick={() => updatePage('page', Math.max(1, page - 1))}
                 className={
                   page <= 1
                     ? 'pointer-events-none opacity-50'
@@ -94,7 +95,7 @@ export default function Paginator({
                   <PaginationEllipsis />
                 ) : (
                   <PaginationLink
-                    onClick={() => setPage(pageNumber)}
+                    onClick={() => updatePage('page', pageNumber)}
                     isActive={page === pageNumber}
                     className="cursor-pointer"
                   >
@@ -107,7 +108,7 @@ export default function Paginator({
             <PaginationItem>
               <PaginationNext
                 onClick={() =>
-                  setPage((prev) => Math.min(totalPages, prev + 1))
+                  updatePage('page', Math.min(totalPages, page + 1))
                 }
                 className={
                   page >= totalPages

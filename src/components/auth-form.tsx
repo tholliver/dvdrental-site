@@ -88,23 +88,17 @@ export function AuthForm() {
       email: values.email,
       password: values.password,
     })
-    console.log('Here the massa', data)
 
     // Here you would typically send a request to your authentication API
   }
 
   async function onRegisterSubmit(values: z.infer<typeof registerSchema>) {
-    console.log('Register:', values)
     const { data, error } = await signUp.email({
       email: values.email,
       name: values.name,
       password: values.password,
       image: values.image,
     })
-
-    console.log(data, error)
-
-    // Here you would typically send a request to your registration API
   }
 
   return (

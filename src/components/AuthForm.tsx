@@ -57,12 +57,10 @@ export function AuthForm() {
   })
 
   function onSignInSubmit(values: z.infer<typeof signInSchema>) {
-    console.log('Sign In:', values)
     // Here you would typically send a request to your authentication API
   }
 
   function onRegisterSubmit(values: z.infer<typeof registerSchema>) {
-    console.log('Register:', values)
     // Here you would typically send a request to your registration API
   }
 

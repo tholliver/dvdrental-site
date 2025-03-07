@@ -10,7 +10,6 @@ import { Loader2 } from 'lucide-react'
 
 export default function Page() {
   const router = useRouter()
-  console.log('#############################', router.query.id, router)
   const shouldFetch = router.isReady && router.query.id
   const {
     data: customerData,

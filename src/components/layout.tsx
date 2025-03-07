@@ -13,9 +13,11 @@ const Layout = ({ children }: LayoutProps) => {
       <Head>
         <title>% | DVD Renral</title>
       </Head>
-      <BetterNav />
-      <main className="bg-slate-950">{children}</main>
-      <Footer />
+      <div className="flex flex-col min-h-screen">
+        <BetterNav />
+        <main className="bg-slate-950 flex-grow">{children}</main>
+        <Footer />
+      </div>
     </>
   )
 }
