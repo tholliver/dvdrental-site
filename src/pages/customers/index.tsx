@@ -52,18 +52,19 @@ export default function CustomerList() {
         ) : (
           <div>
             <CustomersTable customers={customers} />
-            <div className="mt-4">
+            {/* <div className="mt-4">
               {metadata && metadata.totalPages > 1 && (
                 <Paginator
                   page={page}
                   total={metadata?.total}
                   currentPage={metadata?.currentPage}
                   pageSize={metadata?.pageSize}
-                  setPage={setPage}
+                  // setPage={setPage}
+                  updatePage={{}}
                   totalPages={metadata?.totalPages}
                 />
               )}
-            </div>
+            </div> */}
           </div>
         )}
       </div>
