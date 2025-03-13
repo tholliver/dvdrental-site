@@ -1,92 +1,136 @@
-import Link from 'next/link'
-import { ArrowRight, Film, MapPin, Star, Users } from 'lucide-react'
+import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
+import { Calendar, Contact, Film, Package } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { QueryStats } from '@/server/db/queries/query-stats'
+import DialCharts from '@/components/CustomCharts/DialCharts'
+import TopFilmsTable from '@/components/FilmTable'
 import Head from 'next/head'
-import { AuthForm } from '@/components/auth-form'
 
-export default function Home() {
-  // if (!session) {
-  //   console.log('Session data: ', session)
-  //   return <div>No session</div>
-  // }
+type AllStats = {
+  totalRents: number
+  totalPays: number
+  totalFilms: number
+  totalCustomers: number
+}
 
+export const getServerSideProps: GetServerSideProps<{
+  allstats: AllStats
+}> = async () => {
+  const oneYearAgoTimestamp = new Date().setFullYear(
+    new Date().getFullYear() - 20
+  )
+  const oneYearAgo = new Date(oneYearAgoTimestamp)
+  const oneYearAgoFormatted = oneYearAgo.toISOString().split('T')[0]
+
+  const [
+    [{ totalRents }],
+    [{ totalPays }],
+    [{ totalFilms }],
+    [{ totalCustomers }],
+  ] = await Promise.all([
+    QueryStats.GetTotalRentalsByDate(oneYearAgoFormatted),
+    QueryStats.GetTotalPaysByDate(oneYearAgoFormatted),
+    QueryStats.GetTotalFilms(),
+    QueryStats.GetTotalCustomer(),
+  ])
+
+  return {
+    props: {
+      allstats: { totalRents, totalPays, totalFilms, totalCustomers }, // Ensuring it matches AllStats type
+    },
+  }
+}
+
+export default function DashboardPage({
+  allstats,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <div>
+    <div className="flex flex-1 justify-center">
       <Head>
-        <title>DVD Rental</title>
-        <meta property="og:title" content="Home" key="title" />
+        <title>Dashboard - DVD Rental</title>
       </Head>
-      <section className="bg-gradient-to-r from-primary to-secondary text-primary-foreground py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-4">
-            Your Gateway to Endless Entertainment
-          </h2>
-          <p className="text-xl mb-8">
-            Discover thousands of movies from classics to the latest
-            blockbusters
-          </p>
-          <Link
-            href="/dashboard"
-            className="bg-accent hover:bg-accent/90 text-accent-foreground px-6 py-3 rounded-full text-lg font-semibold inline-flex items-center"
-          >
-            Start Browsing <ArrowRight className="ml-2" />
-          </Link>
-        </div>
-      </section>
-
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <h3 className="text-3xl font-bold text-center mb-12">
-            Why Choose DVDRental?
-          </h3>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <Film className="mx-auto h-12 w-12 text-primary mb-4" />
-              <h4 className="text-xl font-semibold mb-2">Vast Selection</h4>
-              <p>Access to thousands of titles across multiple genres</p>
+      <div className="container min-h-screen">
+        {/* <header className="border-b border-slate-800">
+          <div className=" flex h-16 items-center px-4">
+            <div className="flex items-center gap-2">
+              <div className="h-8 w-8 rounded-full bg-purple-600" />
+              <span className="text-xl font-bold text-white">DVD Rental</span>
             </div>
-            <div className="text-center">
-              <MapPin className="mx-auto h-12 w-12 text-primary mb-4" />
-              <h4 className="text-xl font-semibold mb-2">
-                Convenient Locations
-              </h4>
-              <p>Multiple stores to serve you better</p>
-            </div>
-            <div className="text-center">
-              <Star className="mx-auto h-12 w-12 text-primary mb-4" />
-              <h4 className="text-xl font-semibold mb-2">Top Rated Service</h4>
-              <p>Friendly staff and excellent customer support</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 bg-muted">
-        <div className="container mx-auto px-4">
-          <h3 className="text-3xl font-bold text-center mb-12">
-            Featured Categories
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {['Action', 'Comedy', 'Drama', 'Sci-Fi'].map((category) => (
-              <Link
-                key={category}
-                href="#"
-                className="bg-background shadow-md rounded-lg p-4 text-center hover:shadow-lg transition-shadow"
-              >
-                <h4 className="font-semibold">{category}</h4>
+            <nav className="ml-auto flex gap-6">
+              <Link className="text-sm text-white" href="#">
+                Home
               </Link>
-            ))}
+              <Link className="text-sm text-slate-400" href="#">
+                Films
+              </Link>
+              <Link className="text-sm text-slate-400" href="#">
+                Customers
+              </Link>
+              <Link className="text-sm text-slate-400" href="#">
+                Contact
+              </Link>
+            </nav>
           </div>
-        </div>
-      </section>
+        </header> */}
 
-      {/* <section id="signin-section" className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <h3 className="text-3xl font-bold mb-8 text-center">
-            Join Our Community of Film Fans
-          </h3>
-          <AuthForm />
-        </div>
-      </section> */}
+        <main className=" px-4 py-8">
+          <div className="grid gap-4 md:grid-cols-4 sm:grid-cols-3">
+            <Card className="bg-slate-900 text-white">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total rents
+                </CardTitle>
+                <Package className="h-4 w-4 text-slate-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{allstats.totalRents}</div>
+                <p className="text-xs text-slate-400">Total rents</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-slate-900 text-white">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total payments
+                </CardTitle>
+                <Calendar className="h-4 w-4 text-slate-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{allstats.totalPays}</div>
+                <p className="text-xs text-slate-400">Total payments</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-slate-900 text-white">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total films
+                </CardTitle>
+                <Film className="h-4 w-4 text-slate-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{allstats.totalFilms}</div>
+                <p className="text-xs text-slate-400">Total films</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-slate-900 text-white">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total customers
+                </CardTitle>
+                <Contact className="h-4 w-4 text-slate-400" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {allstats.totalCustomers}
+                </div>
+                <p className="text-xs text-slate-400">Total customers</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <DialCharts />
+          <TopFilmsTable />
+        </main>
+      </div>
     </div>
   )
 }
