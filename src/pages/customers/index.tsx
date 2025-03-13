@@ -18,10 +18,6 @@ export default function CustomerList() {
     currentPage,
   } = useCustomers()
 
-  if (isLoading) {
-    return <ShadowTable rows={10} heightRow="8" />
-  }
-
   return (
     <div className="flex flex-1 justify-center">
       <Head>

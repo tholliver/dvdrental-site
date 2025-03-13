@@ -25,10 +25,10 @@ export default function CustomersTable({ customers }: CustomersTableProps) {
                 Email
               </th>
               <th scope="col" className="px-6 py-3">
-                Category
+                Joined Date
               </th>
               <th scope="col" className="px-6 py-3">
-                Price
+                Active
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
@@ -51,10 +51,7 @@ export default function CustomersTable({ customers }: CustomersTableProps) {
                     : 'N/A'}
                 </td>
                 <td className="px-6 py-4">
-                  {new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                  }).format(2999)}
+                  {customer.active ? 'Active' : '----'}
                 </td>
                 <td className="px-6 py-4">
                   <a
