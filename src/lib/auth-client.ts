@@ -25,7 +25,7 @@ export function getNavLinks(role: string) {
     // }
 
     links.push(...[{ href: "/customers", label: "Customers" },
-    { href: "/dashboard", label: "Dashboard" }
+        // { href: "/dashboard", label: "Dashboard" }
     ])
     return links
 }

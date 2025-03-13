@@ -8,7 +8,6 @@ export default async function handler(
     res: NextApiResponse<ResponseData | { message: 'Error' }>
 ) {
     const { by } = req.query
-    console.log('Params recived; ', by);
 
     try {
         const queryResult = await QueryPayments.GetAllPaymentsByDate(String(by))
